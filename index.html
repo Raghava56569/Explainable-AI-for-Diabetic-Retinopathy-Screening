@@ -1,0 +1,2008 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-palette="emerald">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0E7C6B">
+  <title>AI Retinal Screening Portal · RetinaCare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================
+       DESIGN TOKENS
+       Two axes: data-theme (light | dark) and data-palette
+       (emerald | indigo | amber | rose). Every palette defines
+       the same variable set for each mode, so switching either
+       axis at runtime is a single attribute change.
+       ========================================================= */
+    :root {
+      --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --ease: cubic-bezier(.23, 1, .32, 1);
+      --ok: #16a37f;
+      --ok-rgb: 22, 163, 127;
+      --warn: #d18a12;
+      --warn-rgb: 209, 138, 18;
+      --coral: #d64550;
+      --coral-rgb: 214, 69, 80;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    /* ---------- EMERALD (default): deep teal + warm sand ---------- */
+    :root, [data-palette="emerald"] {
+      --primary: #0E7C6B; --primary-hover: #0A5F52; --primary-rgb: 14, 124, 107;
+      --primary-light: rgba(14, 124, 107, 0.12);
+      --accent: #C98A1B; --accent-rgb: 201, 138, 27;
+      --navy: #10231E; --ink: #2F4A43; --muted: #6B8079; --line: #D3DED8;
+      --paper: #FBFCFA; --bg: #EEF2EE;
+      --hero-a: #0E7C6B; --hero-b: #134E4A; --hero-c: #0B2E2A;
+      --shadow: 0 10px 25px rgba(16, 35, 30, 0.06);
+      --card-hover-shadow: 0 16px 36px rgba(var(--primary-rgb), 0.12), 0 0 0 3px rgba(var(--primary-rgb), 0.12);
+      --top-blur: rgba(251, 252, 250, 0.82);
+      --cursor-dot: #0E7C6B; --cursor-ring: #2DBFA6;
+      --cursor-dot-hover: #C98A1B; --cursor-ring-hover: #E2B15A;
+      --cursor-dot-press: #134E4A; --cursor-ring-press: #16a37f;
+    }
+    [data-theme="dark"], [data-theme="dark"][data-palette="emerald"] {
+      --primary: #2DBFA6; --primary-hover: #5ED4C0; --primary-rgb: 45, 191, 166;
+      --primary-light: rgba(45, 191, 166, 0.16);
+      --accent: #E2B15A; --accent-rgb: 226, 177, 90;
+      --navy: #EAF2EE; --ink: #C3D2CC; --muted: #86A098; --line: #23342F;
+      --paper: #142220; --bg: #0C1614;
+      --hero-a: #0E7C6B; --hero-b: #0F3B36; --hero-c: #081C19;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      --card-hover-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 0 3px rgba(var(--primary-rgb), 0.28);
+      --top-blur: rgba(20, 34, 32, 0.82);
+    }
+
+    /* ---------- INDIGO: indigo + amber ---------- */
+    [data-palette="indigo"] {
+      --primary: #4F46E5; --primary-hover: #3F37C9; --primary-rgb: 79, 70, 229;
+      --primary-light: rgba(79, 70, 229, 0.12);
+      --accent: #F59E0B; --accent-rgb: 245, 158, 11;
+      --navy: #171A33; --ink: #363A5C; --muted: #6C7093; --line: #D4D6E6;
+      --paper: #FBFBFE; --bg: #EDEEF6;
+      --hero-a: #4F46E5; --hero-b: #312E81; --hero-c: #1E1B4B;
+      --top-blur: rgba(251, 251, 254, 0.82);
+      --cursor-dot: #4F46E5; --cursor-ring: #8B83FF;
+      --cursor-dot-hover: #F59E0B; --cursor-ring-hover: #FBBF24;
+      --cursor-dot-press: #312E81; --cursor-ring-press: #16a37f;
+    }
+    [data-theme="dark"][data-palette="indigo"] {
+      --primary: #8B83FF; --primary-hover: #A9A3FF; --primary-rgb: 139, 131, 255;
+      --primary-light: rgba(139, 131, 255, 0.16);
+      --accent: #FBBF24; --accent-rgb: 251, 191, 36;
+      --navy: #ECEDFA; --ink: #C5C7E3; --muted: #8A8DB5; --line: #292C4A;
+      --paper: #181A30; --bg: #0F1020;
+      --hero-a: #4F46E5; --hero-b: #26236B; --hero-c: #121036;
+      --top-blur: rgba(24, 26, 48, 0.82);
+    }
+
+    /* ---------- AMBER: burnt amber + ink neutrals ---------- */
+    [data-palette="amber"] {
+      --primary: #B45309; --primary-hover: #92400E; --primary-rgb: 180, 83, 9;
+      --primary-light: rgba(180, 83, 9, 0.12);
+      --accent: #0E7C6B; --accent-rgb: 14, 124, 107;
+      --navy: #2A1F10; --ink: #4E3D24; --muted: #82704F; --line: #E2D8C6;
+      --paper: #FFFCF7; --bg: #F4EFE6;
+      --hero-a: #B45309; --hero-b: #7C2D12; --hero-c: #3B1A0B;
+      --top-blur: rgba(255, 252, 247, 0.82);
+      --cursor-dot: #B45309; --cursor-ring: #F59E0B;
+      --cursor-dot-hover: #0E7C6B; --cursor-ring-hover: #2DBFA6;
+      --cursor-dot-press: #7C2D12; --cursor-ring-press: #16a37f;
+    }
+    [data-theme="dark"][data-palette="amber"] {
+      --primary: #F59E0B; --primary-hover: #FBBF24; --primary-rgb: 245, 158, 11;
+      --primary-light: rgba(245, 158, 11, 0.16);
+      --accent: #2DBFA6; --accent-rgb: 45, 191, 166;
+      --navy: #F7EFE4; --ink: #D9CBB7; --muted: #A38F73; --line: #33291E;
+      --paper: #201A13; --bg: #14100B;
+      --hero-a: #B45309; --hero-b: #5C2210; --hero-c: #2A1208;
+      --top-blur: rgba(32, 26, 19, 0.82);
+    }
+
+    /* ---------- ROSE: deep rose + cool plum neutrals ---------- */
+    [data-palette="rose"] {
+      --primary: #BE185D; --primary-hover: #9D174D; --primary-rgb: 190, 24, 93;
+      --primary-light: rgba(190, 24, 93, 0.12);
+      --accent: #0E7C6B; --accent-rgb: 14, 124, 107;
+      --navy: #2B1420; --ink: #4F2C3F; --muted: #8A6A7B; --line: #E6D5DD;
+      --paper: #FFFBFC; --bg: #F5EEF1;
+      --hero-a: #BE185D; --hero-b: #831843; --hero-c: #3B0A22;
+      --top-blur: rgba(255, 251, 252, 0.82);
+      --cursor-dot: #BE185D; --cursor-ring: #F472B6;
+      --cursor-dot-hover: #0E7C6B; --cursor-ring-hover: #2DBFA6;
+      --cursor-dot-press: #831843; --cursor-ring-press: #16a37f;
+    }
+    [data-theme="dark"][data-palette="rose"] {
+      --primary: #F472B6; --primary-hover: #F9A8D4; --primary-rgb: 244, 114, 182;
+      --primary-light: rgba(244, 114, 182, 0.16);
+      --accent: #2DBFA6; --accent-rgb: 45, 191, 166;
+      --navy: #FAEEF3; --ink: #DFC6D1; --muted: #A88797; --line: #372430;
+      --paper: #21141B; --bg: #160C11;
+      --hero-a: #BE185D; --hero-b: #5E1030; --hero-c: #2A0716;
+      --top-blur: rgba(33, 20, 27, 0.82);
+    }
+
+    /* =========================================================
+       BASE
+       ========================================================= */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { max-width: 100%; overflow-x: hidden; }
+    body {
+      margin: 0; background: var(--bg); color: var(--navy);
+      font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+    h1, h2, h3, .display { font-family: var(--font-display); }
+
+    .has-real-image :is(.disc, .lesion) { display: none !important; }
+    .has-real-image::before, .has-real-image::after { display: none !important; }
+
+    /* =========================================================
+       CUSTOM CURSOR
+       Both dot and ring are positioned with transform only (no
+       left/top), and both are updated inside one rAF loop. Hover
+       state is resolved from the element under the pointer on
+       every frame so it survives DOM changes, page swaps and the
+       modal opening.
+       ========================================================= */
+    .cursor-dot, .cursor-ring {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 99999;
+      border-radius: 50%; will-change: transform; opacity: 0;
+      transition: opacity .2s ease;
+    }
+    .cursor-dot {
+      width: 8px; height: 8px; margin: -4px 0 0 -4px; background: var(--cursor-dot);
+    }
+    .cursor-ring {
+      width: 34px; height: 34px; margin: -17px 0 0 -17px;
+      border: 2px solid var(--cursor-ring);
+    }
+    .cursor-dot::after, .cursor-ring::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; }
+    body.has-custom-cursor .cursor-dot, body.has-custom-cursor .cursor-ring { opacity: 1; }
+    body.has-custom-cursor.cursor-out .cursor-dot, body.has-custom-cursor.cursor-out .cursor-ring { opacity: 0; }
+    .cursor-dot .inner, .cursor-ring .inner {
+      position: absolute; inset: 0; border-radius: inherit;
+      transition: transform .22s var(--ease), background .2s ease, border-color .2s ease;
+    }
+    .cursor-ring .inner { border: 2px solid var(--cursor-ring); inset: -2px; }
+    .cursor-ring { border: 0; }
+    .cursor-dot .inner { background: var(--cursor-dot); }
+    body.cursor-hover .cursor-dot .inner { background: var(--cursor-dot-hover); transform: scale(1.4); }
+    body.cursor-hover .cursor-ring .inner { border-color: var(--cursor-ring-hover); transform: scale(1.55); background: rgba(var(--accent-rgb), 0.12); }
+    body.cursor-press .cursor-dot .inner { background: var(--cursor-dot-press); transform: scale(.8); }
+    body.cursor-press .cursor-ring .inner { border-color: var(--cursor-ring-press); transform: scale(.7); background: rgba(var(--ok-rgb), 0.18); }
+    body.has-custom-cursor, body.has-custom-cursor * { cursor: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .cursor-dot, .cursor-ring { display: none !important; }
+    }
+
+    /* =========================================================
+       PAGE TRANSITIONS
+       ========================================================= */
+    .page { display: none; }
+    .page.show { display: block; }
+    @keyframes slideUpFade { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    .page.show > .card, .page.show .stats > .card, .page.show .section-title { animation: slideUpFade .5s var(--ease) both; }
+    .page.show .stats > .card:nth-child(2) { animation-delay: .05s; }
+    .page.show .stats > .card:nth-child(3) { animation-delay: .10s; }
+    .page.show .stats > .card:nth-child(4) { animation-delay: .15s; }
+    @media (prefers-reduced-motion: reduce) { .page.show > .card, .page.show .stats > .card, .page.show .section-title { animation: none; } }
+
+    .live-dot { display: inline-block; width: 8px; height: 8px; background: var(--ok); border-radius: 50%; margin-right: 6px; position: relative; }
+    .live-dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid rgba(var(--ok-rgb), .6); animation: pulseRing 2s ease-out infinite; }
+    @keyframes pulseRing { 0% { transform: scale(.4); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+
+    /* =========================================================
+       LAYOUT
+       ========================================================= */
+    .app { min-height: 100vh; display: flex; }
+    .sidebar {
+      position: fixed; inset: 0 auto 0 0; width: 255px; padding: 26px 15px 18px;
+      background: var(--paper); border-right: 1px solid var(--line); z-index: 10;
+      display: flex; flex-direction: column; transition: background .3s, transform .25s var(--ease);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; padding: 0 8px; }
+    .mark {
+      width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: white;
+      background: linear-gradient(135deg, var(--hero-a), var(--hero-b)); box-shadow: 0 8px 18px rgba(var(--primary-rgb), .25); position: relative;
+    }
+    .mark:after { content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); right: -2px; top: -2px; border: 2px solid var(--paper); }
+    .brand b { font: 600 22px var(--font-display); letter-spacing: -.3px; color: var(--navy); }
+    .brand b span { color: var(--primary); }
+    .brand small { display: block; color: var(--muted); font-size: 11px; letter-spacing: .6px; font-weight: 600; margin-top: 2px; }
+
+    .facility { margin: 30px 4px 25px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--bg); display: flex; align-items: center; gap: 10px; }
+    .facility .mini { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: var(--primary); background: var(--primary-light); font-weight: 700; font-size: 12px; }
+    .facility div:nth-child(2) { flex: 1; }
+    .facility strong, .user strong { display: block; font-size: 13px; color: var(--navy); }
+    .facility span, .user span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .label { color: var(--muted); font-size: 12px; font-weight: 600; padding: 0 11px 10px; }
+
+    .nav { display: grid; gap: 4px; }
+    .nav button { border: 0; background: transparent; color: var(--ink); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; text-align: left; font-weight: 600; font-size: 14px; transition: .2s var(--ease); }
+    .nav button:hover, .nav button.active { background: var(--primary-light); color: var(--primary); transform: translateX(4px); }
+    .nav button.active { font-weight: 700; box-shadow: inset 4px 0 var(--primary); }
+    .nav button .badge { margin-left: auto; border-radius: 20px; padding: 2px 8px; background: rgba(var(--coral-rgb), .15); color: var(--coral); font-size: 11px; font-weight: 700; }
+
+    .sidebar-bottom { margin-top: auto; }
+    .help { display: flex; align-items: center; gap: 10px; padding: 14px; margin: 0 4px 17px; border: 1px solid var(--primary-light); border-radius: var(--radius-md); background: var(--primary-light); color: var(--primary); font-size: 13px; }
+    .help b { display: block; color: var(--primary); }
+    .help span { font-size: 12px; color: var(--primary); opacity: .8; }
+    .help .q { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; background: var(--paper); color: var(--primary); font-weight: bold; }
+    .user { border-top: 1px solid var(--line); padding: 16px 6px; display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 36px; height: 36px; border-radius: 10px; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+    .user div:nth-child(2) { flex: 1; }
+    .online { border-top: 1px solid var(--line); padding: 12px 8px 0; color: var(--muted); font-size: 11px; font-weight: 600; }
+
+    .main { width: calc(100% - 255px); margin-left: 255px; min-width: 0; }
+    .top { height: 88px; padding: 0 45px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--top-blur); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 20; transition: background .3s; }
+    .eyebrow { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .2px; }
+    .top h1 { font: 600 24px var(--font-display); letter-spacing: -.3px; margin: 2px 0 0; color: var(--navy); }
+    .top-actions { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 13px; font-weight: 500; position: relative; }
+    .circle-btn { width: 38px; height: 38px; border: 1px solid var(--line); background: var(--paper); border-radius: 10px; color: var(--ink); transition: .2s var(--ease); display: grid; place-items: center; }
+    .circle-btn:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(var(--primary-rgb), .15); }
+    .top .avatar { border: 0; }
+    .hamb { display: none; }
+    .content { max-width: 1430px; margin: auto; padding: 35px 45px 50px; }
+
+    /* ---------- Theme menu ---------- */
+    .theme-wrap { position: relative; }
+    .theme-menu {
+      position: absolute; right: 0; top: 48px; width: 280px; padding: 16px; z-index: 40;
+      background: var(--paper); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow), 0 20px 40px rgba(0,0,0,.12);
+      display: none; transform-origin: top right;
+    }
+    .theme-menu.open { display: block; animation: slideUpFade .25s var(--ease) both; }
+    .theme-menu h4 { margin: 0 0 10px; font: 600 14px var(--font-body); color: var(--navy); }
+    .mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 4px; background: var(--bg); border-radius: 10px; margin-bottom: 14px; }
+    .mode-row button { border: 0; border-radius: 8px; padding: 8px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700; transition: .2s; }
+    .mode-row button.on { background: var(--paper); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .swatch { border: 2px solid transparent; border-radius: 12px; padding: 6px; background: var(--bg); display: grid; justify-items: center; gap: 6px; transition: .2s var(--ease); }
+    .swatch:hover { transform: translateY(-2px); }
+    .swatch.on { border-color: var(--primary); background: var(--primary-light); }
+    .swatch i { width: 34px; height: 34px; border-radius: 50%; display: block; border: 3px solid var(--paper); box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+    .swatch small { font-size: 11px; font-weight: 600; color: var(--ink); }
+    .swatch[data-palette="emerald"] i { background: linear-gradient(135deg, #0E7C6B 50%, #C98A1B 50%); }
+    .swatch[data-palette="indigo"] i { background: linear-gradient(135deg, #4F46E5 50%, #F59E0B 50%); }
+    .swatch[data-palette="amber"] i { background: linear-gradient(135deg, #B45309 50%, #2A1F10 50%); }
+    .swatch[data-palette="rose"] i { background: linear-gradient(135deg, #BE185D 50%, #0E7C6B 50%); }
+
+    /* ---------- Hero with 3D orbit ---------- */
+    .hero {
+      position: relative; overflow: hidden; min-height: 190px; padding: 35px 42px; border-radius: 22px; color: white;
+      background: radial-gradient(circle at 91% 12%, rgba(255,255,255,.12), transparent 28%), linear-gradient(115deg, var(--hero-a), var(--hero-b) 62%, var(--hero-c));
+      box-shadow: var(--shadow); perspective: 900px;
+    }
+    .hero h2 { font: 500 36px var(--font-display); letter-spacing: -.6px; margin: 8px 0; max-width: 620px; }
+    .hero h2 em { font-style: italic; font-weight: 600; }
+    .hero p { max-width: 560px; margin: 0; color: rgba(255,255,255,.85); font-size: 15px; }
+    .orb3d { position: absolute; right: 70px; top: 50%; width: 150px; height: 150px; transform: translateY(-50%); transform-style: preserve-3d; animation: orbSpin 18s linear infinite; }
+    .orb3d span { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.35); transform-style: preserve-3d; }
+    .orb3d span:nth-child(1) { transform: rotateY(0deg); }
+    .orb3d span:nth-child(2) { transform: rotateY(60deg); }
+    .orb3d span:nth-child(3) { transform: rotateY(120deg); }
+    .orb3d span:nth-child(4) { transform: rotateX(90deg); border-color: rgba(255,255,255,.55); }
+    .orb3d b { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, var(--accent)); box-shadow: 0 0 24px rgba(255,255,255,.5); }
+    @keyframes orbSpin { from { transform: translateY(-50%) rotateY(0) rotateX(12deg); } to { transform: translateY(-50%) rotateY(360deg) rotateX(12deg); } }
+    @media (prefers-reduced-motion: reduce) { .orb3d { animation: none; } }
+
+    /* ---------- Cards with 3D tilt ---------- */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 18px; }
+    .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); transition: transform .25s var(--ease), box-shadow .25s ease, border-color .25s ease; }
+    .card:hover { border-color: var(--primary); box-shadow: var(--card-hover-shadow); }
+    .card.tilt { transform-style: preserve-3d; will-change: transform; }
+    .card.tilt.tilting { transition: box-shadow .25s ease, border-color .25s ease; }
+    .stat { min-height: 135px; padding: 20px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-light); color: var(--primary); font-size: 20px; }
+    .stat:nth-child(2) .stat-icon { background: rgba(var(--warn-rgb), .15); color: var(--warn); }
+    .stat:nth-child(3) .stat-icon { background: rgba(var(--accent-rgb), .15); color: var(--accent); }
+    .stat:nth-child(4) .stat-icon { background: rgba(var(--coral-rgb), .15); color: var(--coral); }
+    .stat label { display: block; color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 14px; }
+    .stat strong { display: block; font-size: 30px; font-weight: 700; letter-spacing: -1px; margin-top: 2px; color: var(--navy); }
+    .stat small { color: var(--muted); font-size: 12px; font-weight: 500; }
+
+    .section-title { display: flex; justify-content: space-between; align-items: end; margin: 30px 0 16px; gap: 16px; }
+    .section-title h2 { font: 600 24px var(--font-display); margin: 4px 0 0; color: var(--navy); letter-spacing: -.3px; }
+    .section-title p { color: var(--muted); font-size: 14px; margin: 6px 0 0; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .btn { border: 0; border-radius: 10px; padding: 12px 18px; font-size: 13px; font-weight: 700; transition: .2s var(--ease); display: inline-flex; align-items: center; gap: 8px; }
+    .btn:active { transform: scale(.97); }
+    .btn.primary { color: white; background: var(--primary); box-shadow: 0 6px 16px rgba(var(--primary-rgb), .3); }
+    .btn.primary:hover { background: var(--primary-hover); box-shadow: 0 8px 20px rgba(var(--primary-rgb), .4); }
+    .btn.secondary { color: var(--ink); border: 1px solid var(--line); background: var(--paper); }
+    .btn.secondary:hover { color: var(--primary); border-color: var(--primary); background: var(--primary-light); }
+    .btn.ghost { background: none; color: var(--primary); padding: 0; }
+    .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    /* ---------- Workflow ---------- */
+    .workflow { padding: 26px 28px 18px; }
+    .workflow-head, .case-head, .table-head { display: flex; justify-content: space-between; align-items: start; }
+    .processing { margin-left: 10px; border-radius: 20px; padding: 4px 10px; background: rgba(var(--ok-rgb), .15); color: var(--ok); font-size: 11px; font-weight: 600; }
+    .processing i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); margin-right: 5px; }
+    .flow-row { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+    .node { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--paper); border-radius: 12px; padding: 12px 14px; min-width: 140px; transition: .2s var(--ease); }
+    .node:hover { transform: translateY(-2px); border-color: var(--primary); }
+    .node b { display: block; font-size: 12px; color: var(--navy); }
+    .node span { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .node .ico { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; color: var(--primary); background: var(--primary-light); font-size: 14px; }
+    .node.active { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); background: var(--bg); }
+    .node .check { color: var(--ok); margin-left: auto; font-weight: bold; }
+    .arrow { color: var(--line); font-size: 20px; }
+    .split { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; font-weight: 600; margin: 20px 35px 12px; }
+    .split:after { content: ""; height: 1px; flex: 1; background: var(--line); }
+    .branches { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 800px; margin: auto; }
+    .branch { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: var(--bg); text-align: left; transition: .2s; }
+    .branch:hover, .branch.selected { border-color: var(--primary); background: var(--paper); box-shadow: 0 0 0 4px var(--primary-light), var(--shadow); transform: translateY(-2px); }
+    .branch-top { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+    .branch-top strong { font-size: 13px; color: var(--navy); }
+    .branch-no { color: var(--muted); font-size: 12px; font-weight: 600; }
+    .pill { margin-left: auto; padding: 4px 10px; border-radius: 20px; font-size: 11px; color: var(--coral); background: rgba(var(--coral-rgb), .15); font-weight: 700; }
+    .pill.blue { color: var(--primary); background: var(--primary-light); }
+    .branch-body { display: flex; align-items: center; gap: 10px; }
+    .branch-body .node { flex: 1; min-width: 0; }
+    .branch-body small { white-space: nowrap; font-size: 12px; color: var(--ink); }
+    .merge { height: 35px; text-align: center; color: var(--muted); }
+    .merge:before { content: ""; display: block; height: 20px; width: 2px; background: var(--line); margin: auto; }
+    .bottom-row .node { min-width: 140px; }
+    .legend { border-top: 1px solid var(--line); margin-top: 20px; padding: 14px 4px 0; color: var(--muted); font-size: 12px; font-weight: 500; }
+    .legend .text { float: right; color: var(--primary); font-weight: 700; transition: .2s; }
+    .legend .text:hover { color: var(--primary-hover); transform: translateX(2px); display: inline-block; }
+
+    .lower { display: grid; grid-template-columns: .78fr 1.22fr; gap: 18px; margin-top: 18px; }
+    .panel { padding: 25px; }
+    .retina { height: 200px; border-radius: 14px; position: relative; overflow: hidden; background: radial-gradient(circle at 51% 48%, #cf7651 0 13%, #7b322f 31%, #2a1b26 69%, #09161c 100%); background-size: cover; background-position: center; }
+    .retina:before { content: ""; position: absolute; inset: 5% 8%; border-radius: 50%; background: radial-gradient(circle at 52% 50%, #df956c, #7c302f 45%, #121b25 78%); }
+    .retina:after { content: ""; position: absolute; left: 50%; top: 49%; width: 48%; height: 2px; background: #351c28; transform: rotate(-20deg); box-shadow: 0 4px #351c28, 0 -3px #351c28; }
+    .disc { position: absolute; z-index: 2; left: 47%; top: 44%; width: 8%; height: 10%; border-radius: 50%; background: #ffd49b; box-shadow: 0 0 10px #ffd49b; }
+    .lesion { position: absolute; z-index: 3; width: 6px; height: 6px; border-radius: 50%; background: #591a25; }
+    .l1 { left: 68%; top: 34%; } .l2 { left: 36%; top: 63%; } .l3 { left: 74%; top: 56%; }
+    .quality { position: absolute; z-index: 4; right: 12px; bottom: 12px; padding: 6px 12px; border-radius: 20px; color: #dcfce7; background: rgba(20, 83, 45, .9); font-size: 10px; font-weight: 700; }
+    .zoomable { cursor: zoom-in; }
+    .zoomable.has-real-image:hover { outline: 3px solid var(--primary); outline-offset: 2px; }
+    .zoom-hint { position: absolute; z-index: 4; left: 12px; top: 12px; padding: 5px 9px; border-radius: 20px; background: rgba(0,0,0,.55); color: #fff; font-size: 10px; font-weight: 700; display: none; }
+    .has-real-image .zoom-hint { display: block; }
+
+    .case-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; margin-top: 10px; }
+    .details { display: grid; gap: 14px; }
+    .details div { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+    .details b { color: var(--navy); text-align: right; }
+    .bar { height: 6px; background: var(--line); border-radius: 6px; }
+    .bar i { display: block; height: 100%; width: 0; background: var(--ok); border-radius: inherit; transition: width .6s var(--ease); }
+    .refer { color: var(--coral) !important; }
+
+    .table-wrap { overflow: auto; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 0 10px 12px; color: var(--muted); font-size: 12px; font-weight: 600; }
+    td { border-top: 1px solid var(--line); padding: 14px 10px; font-size: 13px; color: var(--ink); }
+    tr { transition: .2s var(--ease); }
+    tr:hover td { background: var(--bg); }
+    .patient { display: flex; align-items: center; gap: 12px; min-width: 160px; }
+    .initial { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--primary-light); color: var(--primary); }
+    .patient b, .patient span { display: block; }
+    .patient b { font-size: 13px; color: var(--navy); }
+    .patient span { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .risk { border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 700; background: rgba(var(--coral-rgb), .15); color: var(--coral); }
+    .risk.green { color: var(--ok); background: rgba(var(--ok-rgb), .15); }
+    .status { font-size: 11px; font-weight: 700; border-radius: 20px; padding: 4px 10px; background: rgba(var(--warn-rgb), .15); color: var(--warn); }
+    .grade { display: block; font-size: 11px; color: var(--muted); margin-top: 6px; font-weight: 500; }
+    .bottom-note { margin-top: 18px; color: var(--muted); font-size: 13px; }
+    .bottom-note b { color: var(--primary); transition: .2s; }
+    .bottom-note b:hover { color: var(--primary-hover); }
+
+    /* ---------- Subviews ---------- */
+    .upload-grid, .report-grid, .seg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .upload-box, .check-box, .viewer, .report, .clinical, .generic { padding: 32px; }
+    .upload-box { min-height: 340px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; background: linear-gradient(135deg, var(--bg), var(--paper)); }
+    .upload-icon { width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; background: var(--primary-light); color: var(--primary); font-size: 28px; margin-bottom: 20px; }
+    .upload-box h2, .generic h2 { font: 600 24px var(--font-display); margin: 0 0 10px; color: var(--navy); }
+    .upload-box p, .generic p { color: var(--ink); font-size: 14px; max-width: 480px; }
+    .hidden { display: none; }
+    .help-copy { font-size: 12px; color: var(--muted); margin-top: 18px; }
+    .check-box h3 { font: 600 22px var(--font-display); margin: 4px 0 22px; color: var(--navy); }
+    .checks { display: grid; gap: 18px; }
+    .checks div { display: flex; gap: 12px; align-items: center; color: var(--ink); font-size: 14px; font-weight: 500; }
+    .checks i { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: white; background: var(--ok); font-style: normal; font-size: 12px; font-weight: bold; }
+    .tip { margin-top: 28px; padding: 16px; border-radius: 12px; background: rgba(var(--warn-rgb), .15); color: var(--warn); font-size: 13px; font-weight: 500; }
+
+    .filterbar { display: flex; gap: 12px; margin-bottom: 20px; }
+    .search { flex: 1; max-width: 420px; border: 1px solid var(--line); background: var(--paper); border-radius: 10px; padding: 12px 16px; color: var(--navy); font-size: 14px; }
+    .filter { border: 1px solid var(--line); background: var(--paper); border-radius: 10px; padding: 0 16px; color: var(--ink); font-size: 13px; font-weight: 600; transition: .2s; }
+    .filter:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+    .result-table { padding: 0 22px; overflow: hidden; }
+    .result-table th { padding-top: 22px; }
+    .result-table td { padding: 18px 10px; }
+
+    .seg-grid { grid-template-columns: 1.35fr .65fr; }
+    .viewer { padding: 24px; }
+    .viewer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .viewer-top strong { display: block; font-size: 15px; margin-top: 4px; color: var(--navy); }
+    .large-retina { height: 440px; border-radius: 14px; }
+    .mask-list { display: grid; gap: 12px; }
+    .mask { display: flex; align-items: center; gap: 14px; border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: var(--paper); text-align: left; transition: .2s; }
+    .mask:hover, .mask.selected { border-color: var(--primary); background: var(--bg); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.03); }
+    .mask-thumb { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; flex: none; }
+    .mask strong, .mask span { display: block; }
+    .mask strong { font-size: 14px; color: var(--navy); }
+    .mask span { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .note { padding: 16px; border-radius: 12px; background: var(--bg); color: var(--ink); font-size: 13px; line-height: 1.5; }
+
+    .report-grid { grid-template-columns: 1.2fr .8fr; }
+    .report { padding: 35px; }
+    .report-brand { font-size: 13px; color: var(--muted); font-weight: 700; border-bottom: 1px solid var(--line); padding-bottom: 18px; display: flex; }
+    .report-outcome { display: flex; justify-content: space-between; gap: 24px; padding: 32px 0; border-bottom: 1px solid var(--line); }
+    .report-outcome h2 { font: 600 28px var(--font-display); margin: 8px 0; color: var(--navy); letter-spacing: -.4px; }
+    .report-outcome p { font-size: 14px; color: var(--ink); max-width: 440px; }
+    .ring { width: 80px; height: 80px; border: 8px solid rgba(var(--coral-rgb), .2); border-right-color: var(--coral); border-radius: 50%; display: grid; place-items: center; color: var(--coral); font-weight: 700; font-size: 18px; flex: none; }
+    .callout { margin: 26px 0; padding: 20px; border-left: 4px solid var(--coral); border-radius: 0 12px 12px 0; background: rgba(var(--coral-rgb), .1); color: var(--coral); font-size: 14px; }
+    .callout.ok { border-left-color: var(--ok); background: rgba(var(--ok-rgb), .1); color: var(--ok); }
+    .callout.warn { border-left-color: var(--warn); background: rgba(var(--warn-rgb), .12); color: var(--warn); }
+    .callout.strong { font-weight: 600; }
+    .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .points b { color: var(--primary); font: 600 18px var(--font-display); }
+    .points strong { display: block; font-size: 13px; margin: 6px 0; color: var(--navy); }
+    .points p { font-size: 13px; color: var(--ink); }
+
+    /* Probabilities block on report */
+    .prob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 26px; padding-top: 26px; border-top: 1px solid var(--line); }
+    .prob-card { padding: 16px; border-radius: 12px; background: var(--bg); }
+    .prob-card h4 { margin: 0 0 4px; font: 600 14px var(--font-body); color: var(--navy); }
+    .prob-card .big { font: 600 30px var(--font-display); letter-spacing: -.5px; color: var(--navy); margin: 4px 0 2px; }
+    .prob-card small { color: var(--muted); font-size: 12px; }
+    .prob-track { height: 8px; border-radius: 8px; background: var(--line); margin-top: 10px; overflow: hidden; }
+    .prob-track i { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--primary); transition: width .7s var(--ease); }
+    .class-bars { display: grid; gap: 8px; margin-top: 10px; }
+    .class-bar { display: grid; grid-template-columns: 78px 1fr 46px; align-items: center; gap: 10px; font-size: 12px; color: var(--ink); }
+    .class-bar .prob-track { margin: 0; }
+    .class-bar.win { color: var(--navy); font-weight: 700; }
+    .class-bar.win .prob-track i { background: var(--accent); }
+
+    .toggle { padding: 4px; background: var(--bg); border-radius: 10px; display: flex; }
+    .toggle button { border: 0; border-radius: 8px; padding: 10px 14px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700; transition: .2s; }
+    .toggle button.on { background: var(--paper); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+    .clinical h3 { font: 600 22px var(--font-display); margin-top: 6px; }
+    .metrics { display: grid; gap: 0; margin-top: 24px; }
+    .metrics div { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--muted); gap: 12px; }
+    .metrics b { color: var(--navy); text-align: right; }
+
+    /* Explainability drawer on the report page */
+    .explain-drawer { display: none; margin-top: 20px; }
+    .explain-drawer.open { display: block; animation: slideUpFade .4s var(--ease) both; }
+    .explain-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .explain-pair .retina { height: 300px; }
+    .explain-pair figure { margin: 0; }
+    .explain-pair figcaption { margin-top: 10px; font-size: 13px; color: var(--muted); }
+    .explain-pair figcaption b { color: var(--navy); display: block; font-size: 14px; }
+    .pair-toggle { display: none; }
+
+    .generic { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 22px; background: linear-gradient(135deg, var(--bg), var(--paper)); }
+    .generic-icon { width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; background: rgba(var(--accent-rgb), .15); color: var(--accent); font-size: 28px; }
+    .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 20px; }
+    .tile { padding: 22px; min-height: 180px; }
+    .tile .fake { height: 120px; background: var(--bg); border-radius: 12px; margin: 18px 0; position: relative; background-size: cover; background-position: center; }
+    .fake:before, .fake:after { content: ""; position: absolute; height: 6px; border-radius: 6px; background: var(--line); left: 14%; top: 32px; width: 66%; }
+    .fake:after { top: 58px; left: 34%; width: 28%; }
+    .tile strong, .tile span { display: block; }
+    .tile strong { font-size: 15px; color: var(--navy); }
+    .tile span { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+    /* =========================================================
+       LIGHTBOX
+       ========================================================= */
+    .lightbox { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(8, 14, 12, .82); backdrop-filter: blur(6px); }
+    .lightbox.open { display: flex; animation: fadeIn .2s ease both; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .lightbox figure { margin: 0; max-width: min(92vw, 900px); max-height: 92vh; display: grid; gap: 12px; justify-items: center; animation: popIn .3s var(--ease) both; }
+    @keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+    .lightbox img { max-width: 100%; max-height: 80vh; border-radius: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.5); background: #000; }
+    .lightbox figcaption { color: #fff; font-size: 14px; font-weight: 600; text-align: center; }
+    .lightbox figcaption small { display: block; color: rgba(255,255,255,.7); font-weight: 400; margin-top: 2px; }
+    .lightbox-close { position: absolute; top: 18px; right: 18px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #fff; font-size: 20px; display: grid; place-items: center; transition: .2s; }
+    .lightbox-close:hover { background: rgba(255,255,255,.22); transform: rotate(90deg); }
+    .lightbox-nav { display: flex; gap: 8px; }
+    .lightbox-nav button { border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #fff; border-radius: 20px; padding: 8px 14px; font-size: 12px; font-weight: 700; }
+    .lightbox-nav button.on { background: #fff; color: #111; }
+
+    #toast { position: fixed; right: 26px; bottom: 26px; z-index: 1100; padding: 14px 18px; border-radius: 12px; color: #fff; background: var(--navy); box-shadow: 0 10px 30px rgba(0,0,0,.25); font-size: 13px; font-weight: 500; opacity: 0; transform: translateY(15px); transition: .25s; pointer-events: none; max-width: 360px; }
+    [data-theme="dark"] #toast { color: var(--bg); }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+    @media(max-width:1050px) {
+      .content { padding: 30px 25px; } .top { padding: 0 25px; }
+      .workflow .flow-row { gap: 8px; } .node { min-width: 120px; }
+      .lower { grid-template-columns: 1fr; } .seg-grid, .report-grid { grid-template-columns: 1fr; }
+      .prob-grid { grid-template-columns: 1fr; }
+    }
+    @media(max-width:760px) {
+      .sidebar { transform: translateX(-100%); box-shadow: 15px 0 35px rgba(0,0,0,.1); }
+      .sidebar.open { transform: none; } .main { width: 100%; margin: 0; }
+      .hamb { display: inline-block; } .top { height: 80px; padding: 0 20px; }
+      .top h1 { font-size: 18px; } .top-actions .sync { display: none; }
+      .content { padding: 25px 20px 40px; } .hero { padding: 28px; min-height: 200px; }
+      .hero h2 { font-size: 28px; } .orb3d { right: -30px; opacity: .6; }
+      .stats { grid-template-columns: 1fr 1fr; } .branches { grid-template-columns: 1fr; }
+      .bottom-row .node { min-width: 120px; } .flow-row { justify-content: center; }
+      .lower, .case-layout, .upload-grid, .report-grid, .seg-grid { grid-template-columns: 1fr; }
+      .section-title { align-items: flex-start; flex-direction: column; gap: 14px; }
+      .generic { grid-template-columns: auto 1fr; } .generic .btn { grid-column: 1/-1; justify-self: start; }
+      .tiles { grid-template-columns: 1fr; } .points { grid-template-columns: 1fr; }
+      .report-outcome { align-items: flex-start; flex-direction: column; } .ring { align-self: flex-end; margin-top: -85px; }
+      .top-actions { gap: 8px; }
+      .sidebar-scrim { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 9; border: 0; }
+      .explain-pair { grid-template-columns: 1fr; }
+      .explain-pair figure { display: none; } .explain-pair figure.on { display: block; }
+      .pair-toggle { display: flex; margin-bottom: 12px; width: max-content; }
+      .theme-menu { right: -60px; }
+      #testAnotherTop span { display: none; }
+    }
+    @media(max-width:430px) {
+      .workflow { padding: 22px 16px 16px; } .node { min-width: 110px; padding: 10px; }
+      .node b { font-size: 11px; } .node span { font-size: 10px; }
+      .arrow { font-size: 16px; } .legend .text { float: none; display: block; margin-top: 10px; }
+      .stat { padding: 16px; } .stat strong { font-size: 26px; }
+      .hero p { max-width: 260px; font-size: 13px; }
+    }
+
+    /* =========================================================
+       V3 ADDITIONS: aurora background, 3D page transitions,
+       iris cursor, ripples, count-ups
+       ========================================================= */
+    body { position: relative; }
+    .bg-aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .bg-aurora i {
+      position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; opacity: .32;
+      background: radial-gradient(circle, rgba(var(--primary-rgb), .55) 0%, rgba(var(--primary-rgb), .18) 30%, transparent 62%);
+      animation: auroraDrift 40s ease-in-out infinite alternate; will-change: transform; transform: translateZ(0);
+    }
+    .bg-aurora i:nth-child(1) { top: -25vmax; left: -15vmax; }
+    .bg-aurora i:nth-child(2) { bottom: -30vmax; right: -10vmax; background: radial-gradient(circle, rgba(var(--accent-rgb), .5) 0%, rgba(var(--accent-rgb), .15) 30%, transparent 62%); animation-duration: 52s; animation-delay: -12s; }
+    .bg-aurora i:nth-child(3) { top: 30%; left: 40%; width: 40vmax; height: 40vmax; opacity: .16; animation-duration: 40s; animation-delay: -20s; }
+    [data-theme="light"] .bg-aurora i { opacity: .14; }
+    [data-theme="light"] .bg-aurora i:nth-child(3) { opacity: .08; }
+    @keyframes auroraDrift { 0% { transform: translate(0,0) scale(1) rotate(0); } 50% { transform: translate(8vmax, -6vmax) scale(1.15) rotate(20deg); } 100% { transform: translate(-6vmax, 8vmax) scale(.95) rotate(-15deg); } }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+      background-image: linear-gradient(rgba(var(--primary-rgb), .06) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--primary-rgb), .06) 1px, transparent 1px);
+      background-size: 42px 42px; opacity: .35;
+    }
+    .app, .main { position: relative; z-index: 1; }
+    .sidebar { position: fixed; z-index: 10; }
+
+    /* page sweep on navigation */
+    .page-sweep { position: fixed; inset: 0; z-index: 900; pointer-events: none; transform: translateX(-110%) skewX(-12deg); background: linear-gradient(90deg, transparent, rgba(var(--primary-rgb), .45), rgba(var(--accent-rgb), .35), transparent); opacity: 0; }
+    .page-sweep.run { animation: sweep .65s var(--ease) both; }
+    @keyframes sweep { 0% { transform: translateX(-110%) skewX(-12deg); opacity: 1; } 99% { opacity: 1; } 100% { transform: translateX(110%) skewX(-12deg); opacity: 0; } }
+    .page-sweep { width: 100vw; max-width: 100%; }
+
+    /* 3D page entrance */
+    .content { perspective: 1400px; }
+    .page.show { animation: pageIn .6s var(--ease) both; transform-origin: 50% 0; }
+    @keyframes pageIn { from { opacity: 0; transform: rotateX(-10deg) translateY(28px) scale(.985); } to { opacity: 1; transform: none; } }
+    .page.show > .card, .page.show .stats > .card, .page.show .section-title, .page.show .hero, .page.show .lower > .card, .page.show .tiles > .card, .page.show .upload-grid > .card, .page.show .report-grid > .card, .page.show .seg-grid > * {
+      animation: cardIn .7s var(--ease) both;
+    }
+    .page.show .stats > .card:nth-child(2), .page.show .tiles > .card:nth-child(2), .page.show .upload-grid > .card:nth-child(2), .page.show .report-grid > .card:nth-child(2), .page.show .seg-grid > :nth-child(2), .page.show .lower > .card:nth-child(2) { animation-delay: .08s; }
+    .page.show .stats > .card:nth-child(3), .page.show .tiles > .card:nth-child(3) { animation-delay: .16s; }
+    .page.show .stats > .card:nth-child(4) { animation-delay: .24s; }
+    .page.show > .card { animation-delay: .12s; }
+    @keyframes cardIn { from { opacity: 0; transform: perspective(900px) rotateX(14deg) translateY(30px) translateZ(-40px); } to { opacity: 1; transform: none; } }
+
+    /* every card is 3D now */
+    .card { transform-style: preserve-3d; }
+    .card.tilt.tilting .stat-icon, .card.tilt.tilting .upload-icon, .card.tilt.tilting .generic-icon, .card.tilt.tilting .ring { transform: translateZ(28px); transition: transform .25s var(--ease); }
+    .card.tilt.tilting strong, .card.tilt.tilting h2, .card.tilt.tilting h3 { transform: translateZ(16px); transition: transform .25s var(--ease); }
+
+    /* nav 3D */
+    .nav { perspective: 600px; }
+    .nav button { transform-style: preserve-3d; }
+    .nav button:hover { transform: translateX(6px) rotateY(-10deg); }
+    .nav button.active { transform: translateX(4px) rotateY(-6deg); }
+
+    /* hero parallax + floating 3D layers */
+    .hero { transform-style: preserve-3d; }
+    .hero > * { transition: transform .15s ease-out; }
+    .hero .layer-a, .hero .layer-b { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); pointer-events: none; }
+    .hero .layer-a { width: 520px; height: 520px; right: -140px; top: -260px; animation: floatA 12s ease-in-out infinite alternate; }
+    .hero .layer-b { width: 260px; height: 260px; left: 55%; bottom: -170px; border-style: dashed; animation: floatA 9s ease-in-out infinite alternate-reverse; }
+    @keyframes floatA { from { transform: translateY(0) rotate(0); } to { transform: translateY(-18px) rotate(12deg); } }
+    .orb3d { animation-duration: 14s; }
+    .orb3d b::after { content: ""; position: absolute; inset: -18px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.7), rgba(var(--accent-rgb), .35) 40%, transparent 70%); animation: glowFade 2.4s ease-in-out infinite; }
+
+    /* buttons: ripple + 3D press */
+    .btn, .circle-btn, .nav button, .mask, .branch, .swatch { position: relative; overflow: hidden; }
+    .ripple { position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.45); pointer-events: none; animation: rippleOut .6s ease-out forwards; }
+    [data-theme="light"] .btn.secondary .ripple, [data-theme="light"] .circle-btn .ripple, [data-theme="light"] .nav button .ripple { background: rgba(var(--primary-rgb), .25); }
+    @keyframes rippleOut { to { transform: scale(4); opacity: 0; } }
+    .btn.primary { transform-style: preserve-3d; box-shadow: 0 6px 16px rgba(var(--primary-rgb), .3), 0 4px 0 -1px var(--primary-hover); }
+    .btn.primary:active { transform: translateY(3px) scale(.98); box-shadow: 0 2px 8px rgba(var(--primary-rgb), .3), 0 1px 0 -1px var(--primary-hover); }
+    .btn.primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%); transform: translateX(-120%); transition: transform .6s var(--ease); }
+    .btn.primary:hover::after { transform: translateX(120%); }
+
+    /* click burst at cursor */
+    .burst { position: fixed; z-index: 99998; pointer-events: none; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: burst .55s var(--ease) forwards; }
+    @keyframes burst { to { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
+
+    /* upload box: breathing dashed frame */
+    .upload-box { position: relative; }
+    .upload-box::before { content: ""; position: absolute; inset: 12px; border-radius: 14px; border: 2px dashed rgba(var(--primary-rgb), .35); pointer-events: none; animation: breathe 3s ease-in-out infinite; }
+    @keyframes breathe { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.01); } }
+    .upload-icon { animation: bob 3s ease-in-out infinite; }
+    @keyframes bob { 0%,100% { transform: translateY(0) rotateX(0); } 50% { transform: translateY(-6px) rotateX(12deg); } }
+
+    /* report ring: conic reveal */
+    .ring { position: relative; border: 0; background: conic-gradient(var(--ring-color, var(--line)) calc(var(--ring-pct, 0) * 1%), rgba(var(--primary-rgb), .12) 0); }
+    .ring::before { content: ""; position: absolute; inset: 8px; border-radius: 50%; background: var(--paper); }
+    .ring > * { position: relative; }
+    .ring.animate { animation: ringSpin .9s var(--ease) both; }
+    @keyframes ringSpin { from { transform: rotateY(90deg) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    /* retina images: 3D hover */
+    .retina.zoomable { transition: transform .35s var(--ease); }
+    .retina.has-real-image, .fake.has-real-image, .mask-thumb.has-real-image { will-change: auto; contain: paint; }
+    .retina.zoomable.has-real-image:hover { transform: perspective(700px) rotateY(-6deg) rotateX(4deg) scale(1.03); outline: none; }
+
+    /* tables: rows slide in */
+    tbody tr:nth-child(-n+6) { animation: rowIn .45s var(--ease) both; }
+    tbody tr:nth-child(2) { animation-delay: .05s; } tbody tr:nth-child(3) { animation-delay: .1s; } tbody tr:nth-child(4) { animation-delay: .15s; }
+    @keyframes rowIn { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+    tr:hover td { background: var(--bg); }
+    tbody tr[onclick]:hover { transform: translateX(4px); }
+
+    /* stat count-up glow */
+    .stat strong.counting { color: var(--primary); text-shadow: 0 0 18px rgba(var(--primary-rgb), .35); }
+
+    /* workflow nodes: pulse chain */
+    .flow-row .node .check { animation: tickPop .5s var(--ease) both; }
+    @keyframes tickPop { from { transform: scale(0) rotate(-40deg); } to { transform: none; } }
+    .node.active { position: relative; }
+    .node.active::after { content: ""; position: absolute; inset: -6px; border-radius: 16px; box-shadow: 0 0 24px rgba(var(--primary-rgb), .35); pointer-events: none; animation: glowFade 2.6s ease-in-out infinite; }
+    @keyframes glowFade { 0%,100% { opacity: .15; } 50% { opacity: .8; } }
+
+    /* theme menu: 3D flip open */
+    .theme-menu.open { animation: menuFlip .35s var(--ease) both; transform-origin: top right; }
+    @keyframes menuFlip { from { opacity: 0; transform: perspective(600px) rotateX(-20deg) translateY(-8px); } to { opacity: 1; transform: none; } }
+    .swatch:hover i { transform: rotateY(180deg); }
+    .swatch i { transition: transform .5s var(--ease); }
+
+    /* lightbox 3D entrance */
+    .lightbox figure { animation: lbIn .45s var(--ease) both; }
+    @keyframes lbIn { from { transform: perspective(1200px) rotateX(18deg) scale(.85); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    /* ---------- IRIS CURSOR ---------- */
+    .cursor-ring { width: 40px; height: 40px; margin: -20px 0 0 -20px; }
+    .cursor-ring .inner { inset: 0; border: 1.5px solid var(--cursor-ring); }
+    .cursor-ring .halo { position: absolute; inset: -7px; border-radius: 50%; border: 1.5px dashed rgba(var(--accent-rgb), .55); animation: haloSpin 6s linear infinite; transition: transform .3s var(--ease), border-color .2s; }
+    @keyframes haloSpin { to { rotate: 360deg; } }
+    .cursor-ring .tick { position: absolute; width: 2px; height: 7px; background: var(--cursor-ring); left: 50%; top: -3px; margin-left: -1px; border-radius: 2px; transform-origin: 1px 23px; opacity: .9; transition: height .2s var(--ease), background .2s; }
+    .cursor-ring .t2 { transform: rotate(90deg); } .cursor-ring .t3 { transform: rotate(180deg); } .cursor-ring .t4 { transform: rotate(270deg); }
+    .cursor-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; }
+    .cursor-trail { position: fixed; top: 0; left: 0; z-index: 99997; pointer-events: none; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--primary-rgb), .22), transparent 60%); opacity: 0; transition: opacity .3s; will-change: transform; }
+    body.has-custom-cursor .cursor-trail { opacity: 1; }
+    body.has-custom-cursor.cursor-out .cursor-trail { opacity: 0; }
+    body.cursor-hover .cursor-ring .inner { transform: scale(1.35); border-color: var(--cursor-ring-hover); background: rgba(var(--accent-rgb), .08); }
+    body.cursor-hover .cursor-ring .halo { transform: scale(1.25); animation-duration: 1.6s; border-color: var(--cursor-ring-hover); }
+    body.cursor-hover .cursor-ring .tick { height: 11px; background: var(--cursor-ring-hover); }
+    body.cursor-hover .cursor-dot .inner { transform: scale(1.6); }
+    body.cursor-press .cursor-ring .inner { transform: scale(.75); border-color: var(--cursor-ring-press); background: rgba(var(--ok-rgb), .15); }
+    body.cursor-press .cursor-ring .halo { transform: scale(.6); }
+    body.cursor-press .cursor-ring .tick { height: 4px; }
+    body.cursor-zoom .cursor-ring .inner { transform: scale(1.6); border-width: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bg-aurora, .page-sweep, .cursor-trail { display: none !important; }
+      .page.show, .page.show *, .upload-box::before, .upload-icon, .orb3d b, .node.active, tbody tr { animation: none !important; }
+    }
+
+    /* ---------- MOBILE FIT ---------- */
+    img, svg, canvas { max-width: 100%; }
+    .table-wrap, .result-table { -webkit-overflow-scrolling: touch; }
+    .result-table { overflow-x: auto; }
+    @media(max-width:760px) {
+      .sidebar { width: min(280px, 84vw); }
+      .content { padding: 18px 14px 40px; }
+      .top { padding: 0 14px; height: 68px; }
+      .top h1 { font-size: 16px; line-height: 1.25; }
+      .top .eyebrow { font-size: 11px; }
+      .hero { padding: 22px 20px; min-height: 0; border-radius: 16px; }
+      .hero h2 { font-size: 24px; margin: 6px 0; }
+      .hero p { max-width: 100%; font-size: 13px; }
+      .orb3d { width: 90px; height: 90px; right: -18px; top: 18px; transform: none; opacity: .45; }
+      @keyframes orbSpin { from { transform: rotateY(0) rotateX(12deg); } to { transform: rotateY(360deg) rotateX(12deg); } }
+      .hero .layer-a, .hero .layer-b { display: none; }
+      .stats { gap: 12px; }
+      .stat { min-height: 0; padding: 14px; }
+      .stat strong { font-size: 24px; }
+      .stat label { font-size: 12px; margin-top: 10px; }
+      .card { border-radius: 14px; }
+      .workflow { padding: 18px 14px 12px; }
+      .flow-row { gap: 8px; margin-top: 18px; }
+      .node { min-width: 0; flex: 1 1 40%; padding: 10px; }
+      .arrow { display: none; }
+      .branches { gap: 10px; }
+      .branch { padding: 12px; }
+      .bottom-row .node { flex: 1 1 46%; }
+      .lower { gap: 12px; margin-top: 12px; }
+      .panel, .upload-box, .check-box, .viewer, .report, .clinical, .generic { padding: 18px; }
+      .retina { height: 180px; }
+      .large-retina { height: 260px; }
+      .case-layout { gap: 14px; }
+      .details .btn { justify-content: center; }
+      .section-title { margin: 18px 0 12px; }
+      .section-title h2 { font-size: 20px; }
+      .actions { width: 100%; }
+      .actions .btn { flex: 1 1 auto; justify-content: center; padding: 11px 12px; }
+      .filterbar { flex-wrap: wrap; }
+      .search { max-width: 100%; flex: 1 1 100%; }
+      .filter { padding: 10px 12px; flex: 1; }
+      .result-table { padding: 0 8px; }
+      .result-table td { padding: 12px 8px; white-space: nowrap; }
+      .report-outcome { padding: 20px 0; }
+      .report-outcome h2 { font-size: 22px; }
+      .ring { align-self: flex-start; margin-top: 0; }
+      .points { gap: 14px; }
+      .prob-grid { gap: 12px; margin-top: 18px; padding-top: 18px; }
+      .prob-card .big { font-size: 26px; }
+      .class-bar { grid-template-columns: 70px 1fr 44px; font-size: 11px; }
+      .explain-pair .retina { height: 220px; }
+      .mask { padding: 10px; gap: 10px; }
+      .mask-thumb { width: 52px; height: 52px; }
+      .tiles { gap: 12px; }
+      .tile { min-height: 0; padding: 16px; }
+      .tile .fake { height: 150px; margin: 12px 0; }
+      .generic { gap: 14px; }
+      .generic-icon { width: 48px; height: 48px; font-size: 22px; }
+      .theme-menu { right: 0; width: min(280px, calc(100vw - 28px)); }
+      .toast, #toast { right: 14px; left: 14px; bottom: 14px; max-width: none; }
+      .lightbox { padding: 12px; }
+      .lightbox-close { top: 10px; right: 10px; }
+      .bottom-note { font-size: 12px; }
+      .help { margin: 0 0 12px; }
+    }
+    @media(max-width:430px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      .hero h2 { font-size: 22px; }
+      .top h1 { font-size: 15px; }
+      #testAnotherTop { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="page-sweep" id="pageSweep" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"><span class="inner"></span></div>
+  <div class="cursor-ring" aria-hidden="true"><span class="inner"></span><span class="halo"></span><span class="tick t1"></span><span class="tick t2"></span><span class="tick t3"></span><span class="tick t4"></span></div>
+  <div class="cursor-trail" aria-hidden="true"></div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="mark">◉</div>
+        <div>
+          <b>retina<span>care</span></b>
+          <small>Personal screening portal</small>
+        </div>
+      </div>
+      <div class="facility" data-interactive="true">
+        <div class="mini">J</div>
+        <div>
+          <strong>Your screening portal</strong>
+          <span>Personal health portal</span>
+        </div>
+        <span style="font-size:16px;">⌄</span>
+      </div>
+      <div class="label">Workspace</div>
+      <nav class="nav" aria-label="Primary navigation">
+        <button class="active" data-view="dashboard">▦ <span>Dashboard</span></button>
+        <button data-view="screening">⌾ <span>Screening</span></button>
+        <button data-view="results">⌁ <span>Results</span><span class="badge" id="results-badge" style="display:none">0</span></button>
+        <button data-view="explainability">✧ <span>Explainability</span></button>
+        <button data-view="segmentation">▤ <span>Visual Evidence</span></button>
+        <button data-view="report">▧ <span>Clinical Report</span></button>
+        <button data-view="simulation">⚙ <span>Simulation</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help" data-interactive="true" onclick="toast('Opening field guide...')">
+          <div class="q">?</div>
+          <div>
+            <b>Need help?</b>
+            <span>View the field guide</span>
+          </div>
+          <span>→</span>
+        </div>
+        <div class="online">
+          <i class="live-dot" id="statusDot"></i> <span id="systemStatusText">Checking AI engine…</span>
+          <span style="float:right">v2.5.0</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="top">
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="circle-btn hamb" id="openNav" aria-label="Open navigation">☰</button>
+          <div>
+            <div class="eyebrow">Your screening portal · <span style="color:var(--ok)"><i class="live-dot" style="margin:0 2px 0 4px;width:6px;height:6px;"></i>Live</span></div>
+            <h1 id="pageTitle">Welcome</h1>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span class="sync" id="topbarSyncStatus">↻ Checking backend status…</span>
+          <button class="btn secondary" id="testAnotherTop" onclick="startNewScreening()" title="Test another image" style="padding:9px 12px">⇧ <span>New screening</span></button>
+          <div class="theme-wrap">
+            <button class="circle-btn" id="themeToggle" aria-label="Theme and colours" aria-haspopup="true" aria-expanded="false">◑</button>
+            <div class="theme-menu" id="themeMenu" role="dialog" aria-label="Theme settings">
+              <h4>Appearance</h4>
+              <div class="mode-row">
+                <button data-mode="dark" class="on">☾ Dark</button>
+                <button data-mode="light">☀ Light</button>
+              </div>
+              <h4>Colour palette</h4>
+              <div class="swatches">
+                <button class="swatch on" data-palette="emerald"><i></i><small>Emerald</small></button>
+                <button class="swatch" data-palette="indigo"><i></i><small>Indigo</small></button>
+                <button class="swatch" data-palette="amber"><i></i><small>Amber</small></button>
+                <button class="swatch" data-palette="rose"><i></i><small>Rose</small></button>
+              </div>
+            </div>
+          </div>
+          <button class="circle-btn" aria-label="Notifications" onclick="toast('No new alerts')">♧</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- DASHBOARD -->
+        <section class="page show" id="dashboard">
+          <div class="hero">
+            <div class="eyebrow" style="color:rgba(255,255,255,.75)" id="heroDate">Loading date…</div>
+            <h2 id="heroHeadline">Care that reaches <em>further</em>.</h2>
+            <p id="heroSub">Every screening you run here is read by the model, explained image by image, and handed to a clinician with the evidence attached.</p>
+            <div class="layer-a" aria-hidden="true"></div><div class="layer-b" aria-hidden="true"></div>
+            <div class="orb3d" aria-hidden="true"><span></span><span></span><span></span><span></span><b></b></div>
+          </div>
+          <div class="stats">
+            <div class="card stat tilt" data-interactive="true" onclick="go('results')">
+              <div class="stat-icon">⌾</div>
+              <label>Screenings this session</label>
+              <strong id="stat-total">0</strong>
+              <small id="stat-total-sub">This browser session</small>
+            </div>
+            <div class="card stat tilt" data-interactive="true" onclick="go('results')">
+              <div class="stat-icon">◷</div>
+              <label>Awaiting review</label>
+              <strong id="stat-awaiting">0</strong>
+              <small id="stat-awaiting-sub">Referable results</small>
+            </div>
+            <div class="card stat tilt" data-interactive="true" onclick="go('results')">
+              <div class="stat-icon">◇</div>
+              <label>Avg. confidence</label>
+              <strong id="stat-avg-conf">—</strong>
+              <small id="stat-avg-conf-sub">This browser session</small>
+            </div>
+            <div class="card stat tilt" data-interactive="true" onclick="go('results')">
+              <div class="stat-icon">⌁</div>
+              <label>Referral rate</label>
+              <strong id="stat-referral-rate">—</strong>
+              <small id="stat-referral-rate-sub">This browser session</small>
+            </div>
+          </div>
+
+          <div class="card workflow" style="margin-top:18px">
+            <div class="workflow-head">
+              <div>
+                <div class="eyebrow">Active pipeline <span class="processing"><i></i>Processing</span></div>
+                <h2 style="font:600 20px var(--font-display);margin:4px 0">Screening workflow</h2>
+              </div>
+              <button class="circle-btn" onclick="toast('Workflow details are ready for model integration')">•••</button>
+            </div>
+            <div class="flow-row">
+              <div class="node"><div class="ico">▧</div><div><b>Retina image</b><span>Captured</span></div><span class="check">✓</span></div>
+              <span class="arrow">→</span>
+              <div class="node"><div class="ico">⌾</div><div><b>Image quality</b><span>Assessment</span></div><span class="check">✓</span></div>
+              <span class="arrow">→</span>
+              <div class="node"><div class="ico">☷</div><div><b>Preprocessing</b><span>Enhanced</span></div><span class="check">✓</span></div>
+            </div>
+            <div class="split">Parallel analysis</div>
+            <div class="branches">
+              <button class="branch selected" onclick="go('report')">
+                <div class="branch-top">
+                  <span class="branch-no">01</span>
+                  <strong>DR classification</strong>
+                  <span class="pill" id="branch-grade-pill">No result yet</span>
+                </div>
+                <div class="branch-body">
+                  <div class="node active"><div class="ico">⌁</div><div><b>DR classification</b><span>Grade 0 to 4</span></div></div>
+                  <span class="arrow">→</span>
+                  <small><b id="branch-refer-label">Awaiting screening</b><br><span style="color:var(--muted)" id="branch-confidence">Upload an image to begin</span></small>
+                </div>
+              </button>
+              <button class="branch" onclick="go('segmentation')">
+                <div class="branch-top">
+                  <span class="branch-no">02</span>
+                  <strong>Visual evidence</strong>
+                  <span class="pill blue" id="branch-overlay-pill">Overlays</span>
+                </div>
+                <div class="branch-body">
+                  <div class="node active"><div class="ico">▤</div><div><b>Visual evidence</b><span>Attention map + processed input</span></div></div>
+                  <span class="arrow">→</span>
+                  <small><b>Visual evidence</b><br><span style="color:var(--muted)">Grad-CAM overlay</span></small>
+                </div>
+              </button>
+            </div>
+            <div class="merge">↓</div>
+            <div class="flow-row bottom-row" style="margin-top:0">
+              <div class="node" onclick="go('explainability')"><div class="ico">✧</div><div><b>Explainability</b><span>Model evidence</span></div></div>
+              <span class="arrow">→</span>
+              <div class="node" onclick="go('report')"><div class="ico">▧</div><div><b>Your clinical report</b><span>Draft ready</span></div></div>
+              <span class="arrow">→</span>
+              <div class="node" onclick="toast('Pinging ophthalmologist...')"><div class="ico">♙</div><div><b>Ophthalmologist</b><span>Review</span></div></div>
+              <span class="arrow">→</span>
+              <div class="node" onclick="go('simulation')"><div class="ico">⚙</div><div><b>Workflow visualization</b><span>Simulation</span></div></div>
+            </div>
+            <div class="legend">
+              ● Completed &nbsp; <span style="color:var(--primary)">●</span> Active &nbsp; ● Pending
+              <span class="text" onclick="go('simulation')">View full workflow →</span>
+            </div>
+          </div>
+
+          <div class="lower">
+            <div class="card panel">
+              <div class="case-head">
+                <div>
+                  <div class="eyebrow">Latest retina screening</div>
+                  <h2 style="font:600 20px var(--font-display);margin:4px 0">Your screening <small style="font:12px var(--font-body);color:var(--muted)">This session</small></h2>
+                </div>
+                <span data-interactive="true" onclick="toast('Options opened')">•••</span>
+              </div>
+              <div class="case-layout">
+                <div class="retina zoomable" id="dash-image" data-interactive="true" data-lightbox="gradcam" onclick="onImageClick(this)">
+                  <span class="zoom-hint">⤢ Tap to enlarge</span>
+                  <div class="disc"></div><i class="lesion l1"></i><i class="lesion l2"></i><i class="lesion l3"></i>
+                  <span class="quality" id="dash-quality">Awaiting screening</span>
+                </div>
+                <div class="details">
+                  <div><span>AI result</span><b class="refer" id="dash-referable">No screening yet</b></div>
+                  <div><span>Detected grade</span><b id="dash-grade">—</b></div>
+                  <div><span>Confidence</span><b id="dash-conf">—</b></div>
+                  <div class="bar"><i id="dash-conf-bar"></i></div>
+                  <div><span>Captured</span><b id="dash-captured">—</b></div>
+                  <button class="btn primary" onclick="go('report')">Review case →</button>
+                </div>
+              </div>
+            </div>
+            <div class="card panel">
+              <div class="table-head">
+                <div>
+                  <div class="eyebrow">Screening history</div>
+                  <h2 style="font:600 20px var(--font-display);margin:4px 0">Screening history</h2>
+                </div>
+                <button class="btn ghost" onclick="go('results')">View all →</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Patient</th><th>Result</th><th>Time</th></tr></thead>
+                  <tbody id="history-body">
+                    <tr id="history-empty"><td colspan="3" style="color:var(--muted);text-align:center;padding:22px 12px;">No screenings yet. Run a screening to see it here.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-note">
+            💡 <b>Field note:</b> A good quality image helps the model see what matters.
+            <b onclick="go('screening')" style="cursor:pointer">Review capture tips</b>
+          </div>
+        </section>
+
+        <!-- SCREENING / UPLOAD -->
+        <section class="page" id="screening">
+          <div class="section-title">
+            <div>
+              <div class="eyebrow">New retina screening</div>
+              <h2>Start your screening</h2>
+              <p>Upload one retina image to begin the AI-assisted workflow.</p>
+            </div>
+            <button class="btn secondary" onclick="toast('Capture guide opened')">View capture guide →</button>
+          </div>
+          <div class="upload-grid">
+            <div class="card upload-box tilt">
+              <div class="upload-icon">⇧</div>
+              <h2 id="uploadTitle">Add a retina image</h2>
+              <p id="uploadText">Use a clear, centered retina image from your camera or upload an existing image.</p>
+              <input class="hidden" id="fileInput" type="file" accept="image/*">
+              <button class="btn primary" id="chooseBtn" onclick="openFilePicker()" style="margin-top:10px;">Choose image →</button>
+              <div class="help-copy">🔒 The selected image is sent to the screening server when analysis begins.</div>
+            </div>
+            <div class="card check-box tilt">
+              <div class="eyebrow">Capture checklist</div>
+              <h3>Before you begin</h3>
+              <div class="checks">
+                <div><i>✓</i> You are seated and comfortable</div>
+                <div><i>✓</i> Pupil is visible and centered</div>
+                <div><i>✓</i> Remove glare before capture</div>
+                <div><i>✓</i> Confirm left or right eye</div>
+              </div>
+              <div class="tip">⚡ Tip: use a soft room light to reduce reflections.</div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:20px;padding:22px">
+            <b style="font-size:14px;color:var(--navy);">What happens next</b>
+            <span style="color:var(--muted);font-size:13px;margin-left:20px">1. Quality check → 2. AI analysis → 3. Explainable report → 4. Clinical review</span>
+          </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="page" id="results">
+          <div class="section-title">
+            <div>
+              <div class="eyebrow">Your screening history</div>
+              <h2>Results</h2>
+              <p>Every screening from this browser session, newest first.</p>
+            </div>
+            <button class="btn primary" onclick="startNewScreening()">⇧ Test another image</button>
+          </div>
+          <div class="filterbar">
+            <input class="search" placeholder="Search patient or case ID">
+            <button class="filter">All results ⌄</button>
+            <button class="filter">Last 7 days ⌄</button>
+          </div>
+          <div class="card result-table">
+            <table>
+              <thead><tr><th>Your screening</th><th>AI result</th><th>Confidence</th><th>Status</th><th>Captured</th></tr></thead>
+              <tbody id="results-body">
+                <tr id="results-empty"><td colspan="5" style="color:var(--muted);text-align:center;padding:22px 12px;">No screenings yet. Run a screening to see results here.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VISUAL EVIDENCE -->
+        <section class="page" id="segmentation">
+          <div class="section-title">
+            <div>
+              <div class="eyebrow">Visual evidence</div>
+              <h2>Visual evidence and overlays</h2>
+              <p>Explore the spatial attention and feature maps directly from the model. Click any image to enlarge.</p>
+            </div>
+            <button class="btn secondary" onclick="toast('Layer comparison ready')">Compare layers →</button>
+          </div>
+          <div class="seg-grid">
+            <div class="card viewer">
+              <div class="viewer-top">
+                <div>
+                  <small style="color:var(--muted)">This session</small>
+                  <strong>Your screening · Latest</strong>
+                </div>
+                <button class="circle-btn" onclick="toast('Overlay bundle downloaded')">↓</button>
+              </div>
+              <div class="retina large-retina zoomable" id="maskView" data-lightbox="gradcam" onclick="onImageClick(this)">
+                <span class="zoom-hint">⤢ Click to enlarge</span>
+                <div class="disc"></div><i class="lesion l1"></i><i class="lesion l2"></i><i class="lesion l3"></i>
+                <span class="quality">Grad-CAM Overlay</span>
+              </div>
+              <p style="font-size:12px;color:var(--muted);margin-top:16px;">Attention overlay · Visual evidence · Click to open full screen</p>
+            </div>
+            <div class="mask-list">
+              <button class="mask selected" onclick="selectMask(this,'gradcam','Grad-CAM Overlay')">
+                <div class="mask-thumb retina" id="thumb-gradcam"><div class="disc"></div></div>
+                <div><strong>Grad-CAM Overlay</strong><span>Where the referable head looked</span></div>
+                <span style="margin-left:auto;color:var(--line);">→</span>
+              </button>
+              <button class="mask" id="mask-evidence" onclick="selectMask(this,'evidence','Scale Evidence Map')" style="display:none">
+                <div class="mask-thumb retina" id="thumb-evidence"><div class="disc"></div></div>
+                <div><strong>Scale Evidence Map</strong><span>Multi-scale attention, weighted</span></div>
+                <span style="margin-left:auto;color:var(--line);">→</span>
+              </button>
+              <button class="mask" onclick="selectMask(this,'processed','Processed Input')">
+                <div class="mask-thumb retina" id="thumb-processed"><div class="disc"></div></div>
+                <div><strong>Processed Input</strong><span>Ben Graham + CLAHE enhanced</span></div>
+                <span style="margin-left:auto;color:var(--line);">→</span>
+              </button>
+              <div class="note">
+                ✧ <b>Visual evidence only</b><br>
+                These overlays highlight features the model focused on. They are not standalone diagnoses.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CLINICAL REPORT -->
+        <section class="page" id="report">
+          <div class="section-title">
+            <div>
+              <div class="eyebrow">Your screening summary</div>
+              <h2>Your clinical report</h2>
+              <p>A clear next step for your screening, with deeper context for the care team.</p>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" id="seeWhyBtn" onclick="toggleExplain()">✧ See why</button>
+              <button class="btn secondary" onclick="toast('PDF prepared for download')">Download PDF ↓</button>
+              <button class="btn primary" onclick="startNewScreening()">⇧ Test another image</button>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px">
+            <div class="patient">
+              <div class="initial">J</div>
+              <div><b>Your screening</b><span id="report-patient-sub">This session · Your location</span></div>
+            </div>
+            <div class="toggle">
+              <button class="on" onclick="reportMode(false,this)">Patient view</button>
+              <button onclick="reportMode(true,this)">Clinical view</button>
+            </div>
+          </div>
+          <div class="report-grid">
+            <article class="card report">
+              <div class="report-brand">
+                <span>◉ retina care screening report</span>
+                <span style="margin-left:auto;color:var(--muted);font-weight:normal;" id="report-date">Today</span>
+              </div>
+              <div class="report-outcome">
+                <div>
+                  <div class="eyebrow">Screening outcome</div>
+                  <h2 id="report-headline">No screening yet</h2>
+                  <p id="report-sub">Run a screening to generate this report.</p>
+                </div>
+                <div style="text-align:center">
+                  <div class="ring" id="report-ring" style="color:var(--muted);"><span>–<small style="font-size:11px;color:var(--muted);"> / 4</small></span></div>
+                  <b style="display:block;color:var(--muted);font-size:13px;margin-top:10px" id="report-referable-text">Awaiting screening</b>
+                  <small style="color:var(--muted);font-size:12px;" id="report-grade-label">No result yet</small>
+                </div>
+              </div>
+              <div class="callout" id="report-callout">
+                <b>In simple words</b><br>
+                This screening result is intended to support clinical review and is not a final diagnosis. A qualified eye-care professional should interpret the result.
+              </div>
+              <div class="points">
+                <div><b>01</b><strong>What we found</strong><p id="point-finding">Upload and screen a retina image to see the model's findings here.</p></div>
+                <div><b>02</b><strong>What this means</strong><p id="point-meaning">This is a screening result, not a final diagnosis.</p></div>
+                <div><b>03</b><strong>What to do next</strong><p id="point-next-step">Share this report with a qualified eye-care professional for interpretation.</p></div>
+              </div>
+
+              <div class="prob-grid" id="probGrid" style="display:none">
+                <div class="prob-card">
+                  <h4>Referable DR probability</h4>
+                  <div class="big" id="prob-referable">—</div>
+                  <small id="prob-referable-sub">Probability that this eye needs specialist review (grade 2 or higher)</small>
+                  <div class="prob-track"><i id="prob-referable-bar"></i></div>
+                </div>
+                <div class="prob-card">
+                  <h4>Grade confidence</h4>
+                  <div class="big" id="prob-confidence">—</div>
+                  <small id="prob-confidence-sub">Probability assigned to the predicted grade</small>
+                  <div class="class-bars" id="classBars"></div>
+                </div>
+              </div>
+
+              <div class="explain-drawer" id="explainDrawer">
+                <div class="split" style="margin:0 0 14px">Why the model decided this</div>
+                <div class="toggle pair-toggle">
+                  <button class="on" onclick="pairShow('processed',this)">Processed input</button>
+                  <button onclick="pairShow('gradcam',this)">Grad-CAM</button>
+                </div>
+                <div class="explain-pair">
+                  <figure class="on" data-pair="processed">
+                    <div class="retina zoomable" id="rep-processed" data-lightbox="processed" onclick="onImageClick(this)">
+                      <span class="zoom-hint">⤢ Click to enlarge</span>
+                      <div class="disc"></div><i class="lesion l1"></i><i class="lesion l2"></i><i class="lesion l3"></i>
+                      <span class="quality">Processed Input</span>
+                    </div>
+                    <figcaption><b>Processed input</b>What the network actually saw after cropping, illumination correction and CLAHE.</figcaption>
+                  </figure>
+                  <figure data-pair="gradcam">
+                    <div class="retina zoomable" id="rep-gradcam" data-lightbox="gradcam" onclick="onImageClick(this)">
+                      <span class="zoom-hint">⤢ Click to enlarge</span>
+                      <div class="disc"></div><i class="lesion l1"></i><i class="lesion l2"></i><i class="lesion l3"></i>
+                      <span class="quality">Grad-CAM Overlay</span>
+                    </div>
+                    <figcaption><b>Grad-CAM overlay</b>Warm regions carried the most weight in the referable-DR decision.</figcaption>
+                  </figure>
+                </div>
+                <p style="font-size:12px;color:var(--muted);margin:14px 0 0">Attention overlays show where the model looked, not a lesion segmentation. <b style="color:var(--primary);cursor:pointer" onclick="go('segmentation')">Open the full viewer →</b></p>
+              </div>
+            </article>
+
+            <aside class="card clinical" id="clinicalPanel" style="display:none">
+              <div class="eyebrow">For your care team</div>
+              <h3>Clinical details</h3>
+              <div class="metrics">
+                <div>DR grade <b id="metric-grade">— / 4</b></div>
+                <div>Grade label <b id="metric-grade-label">—</b></div>
+                <div>Referable DR <b id="metric-refer" style="color:var(--muted)">—</b></div>
+                <div>Referable probability <b id="metric-refer-prob">—</b></div>
+                <div>Grade confidence <b id="metric-conf">—</b></div>
+                <div>Quality score <b id="metric-qual">— / 100</b></div>
+                <div>Quality notes <b id="metric-qual-issues">—</b></div>
+                <div>Algorithm <b id="metric-algo">Swin-Tiny + scale-attentive head</b></div>
+                <div>Referable definition <b id="metric-refdef">Grade ≥ 2</b></div>
+              </div>
+              <div class="note" style="margin-top:24px">Confirm with dilated examination and local clinical history before treatment decisions.</div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- EXPLAINABILITY -->
+        <section class="page" id="explainability">
+          <div class="section-title">
+            <div>
+              <div class="eyebrow">Model evidence</div>
+              <h2>Explainability</h2>
+              <p>Understand which visual patterns contributed to the screening result. Click a tile to enlarge.</p>
+            </div>
+            <button class="btn primary" onclick="go('segmentation')">Explore full view →</button>
+          </div>
+          <div class="card generic">
+            <div class="generic-icon">✧</div>
+            <div>
+              <div class="eyebrow">This session's screening</div>
+              <h2 id="expl-headline">Why the model flagged this image</h2>
+              <p>The visual overlays below trace the spatial attention weights back to the retinal structure the model examined.</p>
+            </div>
+          </div>
+          <div class="tiles">
+            <div class="card tile tilt" data-interactive="true">
+              <span class="eyebrow">01</span>
+              <div class="fake zoomable" id="expl-gradcam" data-lightbox="gradcam" onclick="onImageClick(this)"></div>
+              <strong>Grad-CAM attention</strong>
+              <span>Heatmap overlay</span>
+            </div>
+            <div class="card tile tilt" data-interactive="true">
+              <span class="eyebrow">02</span>
+              <div class="fake zoomable" id="expl-processed" data-lightbox="processed" onclick="onImageClick(this)"></div>
+              <strong>Preprocessed input</strong>
+              <span>Algorithm input stage</span>
+            </div>
+            <div class="card tile tilt" data-interactive="true" id="expl-evidence-tile" style="display:none">
+              <span class="eyebrow">03</span>
+              <div class="fake zoomable" id="expl-evidence" data-lightbox="evidence" onclick="onImageClick(this)"></div>
+              <strong>Scale evidence map</strong>
+              <span>Weighted multi-scale attention</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SIMULATION -->
+        <section class="page" id="simulation">
+          <div class="section-title">
+            <div>
+              <div class="eyebrow">System hand-off</div>
+              <h2>Screening workflow visualization</h2>
+              <p>Preview the downstream validation and field-operations hand-off.</p>
+            </div>
+            <button class="btn primary" onclick="toast('This is a visual workflow representation, not a live integration.')">View workflow →</button>
+          </div>
+          <div class="card generic">
+            <div class="generic-icon" style="background:var(--primary-light);color:var(--primary);">⚙</div>
+            <div>
+              <div class="eyebrow">Workflow overview</div>
+              <h2>Clinical hand-off sequence</h2>
+              <p>AI output → explainability → report → ophthalmologist review → downstream hand-off. Model output and explainability are populated from the screening backend.</p>
+            </div>
+          </div>
+          <div class="tiles">
+            <div class="card tile tilt"><span class="eyebrow">01</span><div class="fake"></div><strong>Model output</strong><span id="sim-model-output">Awaiting screening</span></div>
+            <div class="card tile tilt"><span class="eyebrow">02</span><div class="fake"></div><strong>Validation step</strong><span>Automated checks passed</span></div>
+            <div class="card tile tilt"><span class="eyebrow">03</span><div class="fake"></div><strong>Reviewer hand-off</strong><span>Awaiting review</span></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close preview">✕</button>
+    <figure>
+      <img id="lightboxImg" alt="Screening image preview">
+      <figcaption id="lightboxCaption"></figcaption>
+      <div class="lightbox-nav" id="lightboxNav"></div>
+    </figure>
+  </div>
+
+  <div id="toast"></div>
+  <button class="sidebar-scrim" id="scrim" style="display:none" aria-label="Close navigation"></button>
+
+  <script>
+    // =========================================================
+    // STORAGE KEYS (all sessionStorage: cleared when the tab closes)
+    // =========================================================
+    const STATS_STORAGE_KEY   = 'retinacare_session_stats_v1';
+    const SESSION_STORAGE_KEY = 'retinacare_session_v1';   // history rows + latest full result
+    const THEME_STORAGE_KEY   = 'retinacare_theme_v1';     // { mode, palette }
+
+    function ssGet(key, fallback) {
+      try { const raw = sessionStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+      catch (_e) { return fallback; }
+    }
+    function ssSet(key, value) {
+      try { sessionStorage.setItem(key, JSON.stringify(value)); return true; }
+      catch (_e) { return false; }
+    }
+
+    // =========================================================
+    // THEME: light/dark x palette
+    // =========================================================
+    const PALETTES = ['emerald', 'indigo', 'amber', 'rose'];
+    const themeState = Object.assign({ mode: 'dark', palette: 'emerald' }, ssGet(THEME_STORAGE_KEY, {}));
+    if (!PALETTES.includes(themeState.palette)) themeState.palette = 'emerald';
+    if (themeState.mode !== 'light') themeState.mode = 'dark';
+
+    function applyTheme() {
+      const html = document.documentElement;
+      html.setAttribute('data-theme', themeState.mode);
+      html.setAttribute('data-palette', themeState.palette);
+      document.querySelectorAll('.mode-row button').forEach(b => b.classList.toggle('on', b.dataset.mode === themeState.mode));
+      document.querySelectorAll('.swatch').forEach(b => b.classList.toggle('on', b.dataset.palette === themeState.palette));
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', getComputedStyle(html).getPropertyValue('--primary').trim() || '#0E7C6B');
+      ssSet(THEME_STORAGE_KEY, themeState);
+    }
+    applyTheme();
+
+    const themeToggle = document.getElementById('themeToggle');
+    const themeMenu = document.getElementById('themeMenu');
+    function setThemeMenu(open) {
+      themeMenu.classList.toggle('open', open);
+      themeToggle.setAttribute('aria-expanded', String(open));
+    }
+    themeToggle.addEventListener('click', e => { e.stopPropagation(); setThemeMenu(!themeMenu.classList.contains('open')); });
+    themeMenu.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('click', () => setThemeMenu(false));
+    document.querySelectorAll('.mode-row button').forEach(b => b.addEventListener('click', () => { themeState.mode = b.dataset.mode; applyTheme(); }));
+    document.querySelectorAll('.swatch').forEach(b => b.addEventListener('click', () => { themeState.palette = b.dataset.palette; applyTheme(); }));
+
+    // =========================================================
+    // GREETING (time-aware, branded)
+    // =========================================================
+    const USER_NAME = 'User';
+    function greetingFor(date) {
+      const h = date.getHours();
+      if (h < 5)  return { title: `Late shift, sharp focus, ${USER_NAME}`, hero: 'Night-time reads deserve the <em>same care</em>.', sub: 'The model does not get tired. Upload when you are ready and the report will be waiting.' };
+      if (h < 12) return { title: `Fresh eyes for a new day, ${USER_NAME}`, hero: 'Care that reaches <em>further</em>.', sub: 'Every screening you run here is read by the model, explained image by image, and handed to a clinician with the evidence attached.' };
+      if (h < 17) return { title: `Steady hands, clear sight, ${USER_NAME}`, hero: 'Halfway through, still <em>seeing clearly</em>.', sub: 'Each result carries its own attention map, so nothing is a black box for the reviewer.' };
+      if (h < 21) return { title: `Winding down with a clear view, ${USER_NAME}`, hero: 'The day\'s screenings, <em>explained</em>.', sub: 'Review what the model found, why it found it, and who should look next.' };
+      return { title: `Quiet hours, careful reads, ${USER_NAME}`, hero: 'Good decisions travel <em>slowly and well</em>.', sub: 'Referable results flagged today are ready for the morning review queue.' };
+    }
+    const GREETING = greetingFor(new Date());
+    document.getElementById('heroHeadline').innerHTML = GREETING.hero;
+    document.getElementById('heroSub').textContent = GREETING.sub;
+
+    // =========================================================
+    // NAVIGATION
+    // =========================================================
+    const views = ['dashboard', 'screening', 'results', 'explainability', 'segmentation', 'report', 'simulation'];
+    const PAGE_TITLES = {
+      dashboard: GREETING.title, screening: 'Screening', results: 'Results', explainability: 'Explainability',
+      segmentation: 'Visual evidence', report: 'Clinical report', simulation: 'Simulation'
+    };
+    function go(id) {
+      const sweep = document.getElementById('pageSweep');
+      if (sweep && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { sweep.classList.remove('run'); void sweep.offsetWidth; sweep.classList.add('run'); sweep.addEventListener('animationend', () => sweep.classList.remove('run'), { once: true }); }
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (v === id) { el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); }
+        else el.classList.remove('show');
+      });
+      document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', b.dataset.view === id));
+      document.getElementById('pageTitle').textContent = PAGE_TITLES[id] || (id[0].toUpperCase() + id.slice(1));
+      closeSidebar();
+      setThemeMenu(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.__cursorRecheck) window.__cursorRecheck();
+    }
+    document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => go(b.dataset.view)));
+    function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('scrim').style.display = 'block'; }
+    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('scrim').style.display = 'none'; }
+    document.getElementById('openNav').onclick = openSidebar;
+    document.getElementById('scrim').onclick = closeSidebar;
+
+    (function initHeroDate() {
+      const el = document.getElementById('heroDate');
+      if (el) el.textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    })();
+
+    function toast(text) {
+      const el = document.getElementById('toast');
+      el.textContent = text; el.style.opacity = 1; el.style.transform = 'none';
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => { el.style.opacity = 0; el.style.transform = 'translateY(15px)'; }, 2600);
+    }
+
+    function reportMode(clinical, button) {
+      document.getElementById('clinicalPanel').style.display = clinical ? 'block' : 'none';
+      button.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+      button.classList.add('on');
+    }
+
+    // =========================================================
+    // IMAGES, OVERLAYS, LIGHTBOX
+    // =========================================================
+    window.currentOverlays = { processed: '', gradcam: '', evidence: '' };
+    const OVERLAY_LABELS = {
+      processed: { title: 'Processed input', sub: 'Cropped, illumination-corrected, CLAHE on green channel' },
+      gradcam:   { title: 'Grad-CAM overlay', sub: 'Regions weighted by the referable-DR head' },
+      evidence:  { title: 'Scale evidence map', sub: 'Multi-scale attention weighted by scale importance' }
+    };
+
+    function normalizeImageSource(value) {
+      if (!value) return '';
+      if (value.startsWith('data:') || value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) return value;
+      return `data:image/png;base64,${value}`;
+    }
+
+    function selectMask(button, type, label) {
+      button.parentElement.querySelectorAll('.mask').forEach(b => b.classList.remove('selected'));
+      button.classList.add('selected');
+      const viewer = document.getElementById('maskView');
+      viewer.querySelector('.quality').textContent = label;
+      const src = window.currentOverlays[type];
+      if (src) {
+        viewer.style.backgroundImage = `url(${src})`;
+        viewer.classList.add('has-real-image');
+        viewer.dataset.lightbox = type;
+      } else {
+        toast(label + ' is not available for this screening');
+      }
+    }
+
+    // Lightbox: opens whichever overlay the clicked element is bound to
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxNav = document.getElementById('lightboxNav');
+    let lightboxReturnFocus = null;
+
+    function openLightbox(type) {
+      const src = window.currentOverlays[type];
+      if (!src) { toast('Run a screening first to view this image.'); return; }
+      lightboxImg.src = src;
+      const meta = OVERLAY_LABELS[type] || { title: type, sub: '' };
+      lightboxCaption.innerHTML = `${meta.title}<small>${meta.sub}</small>`;
+      lightboxNav.innerHTML = '';
+      Object.keys(window.currentOverlays).forEach(k => {
+        if (!window.currentOverlays[k]) return;
+        const b = document.createElement('button');
+        b.textContent = OVERLAY_LABELS[k].title;
+        b.className = k === type ? 'on' : '';
+        b.onclick = e => { e.stopPropagation(); openLightbox(k); };
+        lightboxNav.appendChild(b);
+      });
+      lightboxReturnFocus = document.activeElement;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('lightboxClose').focus();
+      if (window.__cursorRecheck) window.__cursorRecheck();
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      lightboxImg.src = '';
+      if (lightboxReturnFocus && lightboxReturnFocus.focus) lightboxReturnFocus.focus();
+      if (window.__cursorRecheck) window.__cursorRecheck();
+    }
+    document.getElementById('lightboxClose').addEventListener('click', e => { e.stopPropagation(); closeLightbox(); });
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    lightbox.querySelector('figure').addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { if (lightbox.classList.contains('open')) closeLightbox(); setThemeMenu(false); closeSidebar(); }
+    });
+
+    // Any element with data-lightbox="processed|gradcam|evidence"
+    function onImageClick(el) {
+      const type = el.dataset.lightbox;
+      if (el.classList.contains('has-real-image') && window.currentOverlays[type]) openLightbox(type);
+      else go('screening');
+    }
+
+    function pairShow(which, btn) {
+      document.querySelectorAll('.explain-pair figure').forEach(f => f.classList.toggle('on', f.dataset.pair === which));
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+    }
+    function toggleExplain(force) {
+      const d = document.getElementById('explainDrawer');
+      const open = typeof force === 'boolean' ? force : !d.classList.contains('open');
+      if (open && !window.currentOverlays.gradcam) { toast('Run a screening first to see the model evidence.'); return; }
+      d.classList.toggle('open', open);
+      document.getElementById('seeWhyBtn').textContent = open ? '✧ Hide evidence' : '✧ See why';
+      if (open) setTimeout(() => d.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+    }
+
+    // =========================================================
+    // SESSION STATS (unchanged key, unchanged shape)
+    // =========================================================
+    function loadSessionStats() {
+      const fallback = { totalScreenings: 0, referableScreenings: 0, confidenceValues: [] };
+      const p = ssGet(STATS_STORAGE_KEY, null);
+      if (!p || typeof p.totalScreenings !== 'number' || typeof p.referableScreenings !== 'number' || !Array.isArray(p.confidenceValues)) return fallback;
+      return p;
+    }
+    window.sessionStats = loadSessionStats();
+    function recordScreeningStat(data) {
+      window.sessionStats.totalScreenings += 1;
+      if (data.referable) window.sessionStats.referableScreenings += 1;
+      if (typeof data.confidence === 'number') window.sessionStats.confidenceValues.push(data.confidence);
+      ssSet(STATS_STORAGE_KEY, window.sessionStats);
+      renderSessionStats();
+    }
+    function countUp(el, target, suffix) {
+      const from = parseFloat(el.dataset.val || '0') || 0;
+      const isInt = Number.isInteger(target);
+      const start = performance.now(), dur = 700;
+      el.classList.add('counting');
+      (function step(now) {
+        const t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);
+        const v = from + (target - from) * e;
+        el.textContent = (isInt ? Math.round(v) : v.toFixed(1)) + (suffix || '');
+        if (t < 1) requestAnimationFrame(step); else { el.dataset.val = String(target); el.classList.remove('counting'); }
+      })(start);
+    }
+    function renderSessionStats() {
+      const s = window.sessionStats;
+      countUp(document.getElementById('stat-total'), s.totalScreenings);
+      countUp(document.getElementById('stat-awaiting'), s.referableScreenings);
+      const badge = document.getElementById('results-badge');
+      badge.textContent = String(s.totalScreenings);
+      badge.style.display = s.totalScreenings > 0 ? '' : 'none';
+      const avgEl = document.getElementById('stat-avg-conf'), rateEl = document.getElementById('stat-referral-rate');
+      if (s.confidenceValues.length) countUp(avgEl, +(s.confidenceValues.reduce((a, b) => a + b, 0) / s.confidenceValues.length * 100).toFixed(1), '%'); else avgEl.textContent = '—';
+      if (s.totalScreenings) countUp(rateEl, +(s.referableScreenings / s.totalScreenings * 100).toFixed(1), '%'); else rateEl.textContent = '—';
+    }
+
+    // =========================================================
+    // SESSION HISTORY + LATEST RESULT (persisted)
+    // =========================================================
+    // history: [{ grade, grade_label, referable, confidence, ts }], newest first
+    // latest:  full /api/screen payload (including base64 images) + ts
+    window.sessionData = (function () {
+      const p = ssGet(SESSION_STORAGE_KEY, null);
+      if (!p || !Array.isArray(p.history)) return { history: [], latest: null };
+      return { history: p.history, latest: p.latest || null };
+    })();
+    function saveSessionData() {
+      if (!ssSet(SESSION_STORAGE_KEY, window.sessionData)) {
+        // Images can exceed quota in some browsers: keep the rows, drop the pictures.
+        const slim = { history: window.sessionData.history, latest: null };
+        ssSet(SESSION_STORAGE_KEY, slim);
+      }
+    }
+
+    function formatTimestamp(date) {
+      return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) + ' · ' + date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+    }
+    function rowHTML(entry, full) {
+      const isRef = entry.referable;
+      const cells = `
+        <td><div class="patient"><div class="initial">SC</div><div><b>Retina screening</b><span>Uploaded image</span></div></div></td>
+        <td><span class="risk ${isRef ? '' : 'green'}">${isRef ? 'Referable' : 'Non-referable'}</span><span class="grade">Grade ${entry.grade}${entry.grade_label ? ' · ' + entry.grade_label : ''}</span></td>`;
+      if (!full) return cells + `<td>${formatTimestamp(new Date(entry.ts))}</td>`;
+      return cells + `<td>${(entry.confidence * 100).toFixed(1)}%</td><td><span class="status">● Screening complete</span></td><td>${formatTimestamp(new Date(entry.ts))}</td>`;
+    }
+    function renderHistoryTables() {
+      const hist = window.sessionData.history;
+      const hb = document.getElementById('history-body');
+      const rb = document.getElementById('results-body');
+      hb.innerHTML = ''; rb.innerHTML = '';
+      if (!hist.length) {
+        hb.innerHTML = '<tr id="history-empty"><td colspan="3" style="color:var(--muted);text-align:center;padding:22px 12px;">No screenings yet. Run a screening to see it here.</td></tr>';
+        rb.innerHTML = '<tr id="results-empty"><td colspan="5" style="color:var(--muted);text-align:center;padding:22px 12px;">No screenings yet. Run a screening to see results here.</td></tr>';
+        return;
+      }
+      hist.slice(0, 6).forEach(e => { const tr = document.createElement('tr'); tr.onclick = () => go('report'); tr.innerHTML = rowHTML(e, false); hb.appendChild(tr); });
+      hist.forEach(e => { const tr = document.createElement('tr'); tr.onclick = () => go('report'); tr.innerHTML = rowHTML(e, true); rb.appendChild(tr); });
+    }
+
+    // =========================================================
+    // GRADE-AWARE REPORT COPY
+    // =========================================================
+    const GRADE_COPY = {
+      0: { headline: 'No signs of diabetic retinopathy detected', sub: 'The model did not find features associated with diabetic retinopathy in this image.',
+           finding: 'No microaneurysms, haemorrhages or exudates were identified by the model.', meaning: 'This is a screening result, not a diagnosis. It suggests no referable disease at this time.',
+           next: 'Keep to your routine annual diabetic eye screening. See an eye-care professional sooner if your vision changes.', tone: 'ok' },
+      1: { headline: 'Mild non-proliferative changes detected', sub: 'Early features, most likely microaneurysms, were found. This grade is not usually referable.',
+           finding: 'The model detected features consistent with mild non-proliferative diabetic retinopathy (grade 1).', meaning: 'Early changes are common and often stable, but they mean the retina is being affected by diabetes.',
+           next: 'Discuss this result with your GP or diabetes team, keep blood sugar and blood pressure well controlled, and repeat screening within 12 months.', tone: 'warn' },
+      2: { headline: 'Moderate changes found. Specialist review recommended', sub: 'This result meets the referable threshold. An ophthalmologist should examine this eye.',
+           finding: 'The model detected features consistent with moderate non-proliferative diabetic retinopathy (grade 2), such as haemorrhages or exudates.', meaning: 'This is a referable result. It does not mean sight is at immediate risk, but it does need an expert eye examination.',
+           next: 'Book an appointment with an ophthalmologist or eye clinic within the next few weeks. Bring this report and your recent HbA1c if you have it.', tone: 'danger' },
+      3: { headline: 'Severe changes found. Please see an ophthalmologist soon', sub: 'This result strongly suggests severe non-proliferative diabetic retinopathy.',
+           finding: 'The model detected extensive features consistent with severe non-proliferative diabetic retinopathy (grade 3).', meaning: 'At this stage the risk of progression to sight-threatening disease is high without treatment.',
+           next: 'Arrange an ophthalmology appointment as soon as possible, ideally within two weeks. Do not wait for routine screening.', tone: 'danger' },
+      4: { headline: 'Proliferative changes found. Urgent ophthalmology review', sub: 'This result suggests proliferative diabetic retinopathy, the most advanced stage.',
+           finding: 'The model detected features consistent with proliferative diabetic retinopathy (grade 4), which may include new abnormal blood vessels.', meaning: 'This stage can threaten sight and often needs treatment such as laser or injections.',
+           next: 'Contact an ophthalmologist or eye emergency service urgently. If you notice sudden floaters, dark patches or vision loss, seek same-day care.', tone: 'danger' }
+    };
+
+    function referableMessage(grade, prob) {
+      const pct = Math.round(prob * 100);
+      if (grade >= 4) return `<b>Please consult an ophthalmologist urgently.</b><br>The model estimates a ${pct}% probability that this eye needs specialist care. Proliferative disease can threaten sight and is treatable when caught early.`;
+      if (grade === 3) return `<b>Please consult an ophthalmologist soon.</b><br>The model estimates a ${pct}% probability that this eye needs specialist care. Severe non-proliferative changes should be examined within a couple of weeks.`;
+      if (grade === 2) return `<b>Please consult an eye-care professional.</b><br>The model estimates a ${pct}% probability that this eye needs specialist care. Moderate changes need an expert examination but are not usually an emergency.`;
+      if (grade === 1) return `<b>Early changes noted.</b><br>The model estimates a ${pct}% probability of referable disease. Mention this result to your GP or diabetes team and keep up regular screening.`;
+      return `<b>In simple words</b><br>The model did not detect referable diabetic retinopathy (estimated ${pct}% probability of referable disease). A qualified eye-care professional should interpret this result and advise on routine follow-up.`;
+    }
+
+    function renderClassBars(probs, winner) {
+      const labels = ['0 · None', '1 · Mild', '2 · Moderate', '3 · Severe', '4 · Prolif.'];
+      const box = document.getElementById('classBars');
+      box.innerHTML = '';
+      (probs || []).forEach((p, i) => {
+        const row = document.createElement('div');
+        row.className = 'class-bar' + (i === winner ? ' win' : '');
+        row.innerHTML = `<span>${labels[i] || i}</span><div class="prob-track"><i></i></div><span style="text-align:right">${(p * 100).toFixed(1)}%</span>`;
+        box.appendChild(row);
+        requestAnimationFrame(() => { row.querySelector('i').style.width = (p * 100).toFixed(1) + '%'; });
+      });
+    }
+
+    // =========================================================
+    // APPLY A RESULT TO THE UI
+    // record=true  -> a fresh screening: add history row, stats, persist
+    // record=false -> rehydrating from sessionStorage on page load
+    // =========================================================
+    function updateUIWithResult(data, opts) {
+      const record = !opts || opts.record !== false;
+      const ts = data.ts || Date.now();
+      data.ts = ts;
+      window.latestScreeningResult = data;
+
+      const isRef = !!data.referable;
+      const grade = Number(data.grade) || 0;
+      const refColor = isRef ? 'var(--coral)' : 'var(--ok)';
+      const refText = isRef ? 'Referable DR' : 'Non-referable';
+      const confPct = (data.confidence * 100).toFixed(1) + '%';
+      const refProb = typeof data.referable_probability === 'number' ? data.referable_probability : (isRef ? 1 : 0);
+      const gradeStr = `Grade ${grade}`;
+      const gradeLabel = data.grade_label || gradeStr;
+      const quality = data.quality || {};
+      const when = new Date(ts);
+
+      // Dashboard
+      const dr = document.getElementById('dash-referable');
+      dr.textContent = refText; dr.style.color = refColor;
+      document.getElementById('dash-grade').textContent = `${gradeStr} · ${gradeLabel}`;
+      document.getElementById('dash-conf').textContent = confPct;
+      document.getElementById('dash-conf-bar').style.width = confPct;
+      document.getElementById('dash-quality').textContent = quality.score != null ? `Quality: ${quality.score}/100 (${quality.category})` : 'Quality: unavailable';
+      document.getElementById('dash-captured').textContent = formatTimestamp(when);
+      document.getElementById('branch-grade-pill').textContent = gradeStr;
+      document.getElementById('branch-refer-label').textContent = refText;
+      document.getElementById('branch-confidence').textContent = confPct + ' confidence';
+      document.getElementById('sim-model-output').textContent = `${gradeStr} · ${isRef ? 'referable' : 'non-referable'}`;
+
+      // Report: outcome ring
+      const ring = document.getElementById('report-ring');
+      ring.innerHTML = `<span>${grade}<small style="font-size:11px;color:${refColor};"> / 4</small></span>`;
+      ring.style.color = refColor;
+      ring.style.setProperty('--ring-color', refColor);
+      ring.style.setProperty('--ring-pct', String(Math.round((grade / 4) * 100)));
+      ring.classList.remove('animate'); void ring.offsetWidth; ring.classList.add('animate');
+      const rrt = document.getElementById('report-referable-text');
+      rrt.textContent = refText; rrt.style.color = refColor;
+      document.getElementById('report-grade-label').textContent = gradeLabel;
+      document.getElementById('report-date').textContent = formatTimestamp(when);
+      document.getElementById('report-patient-sub').textContent = `Screened ${formatTimestamp(when)}`;
+
+      // Report: grade-aware copy
+      const copy = GRADE_COPY[grade] || GRADE_COPY[isRef ? 2 : 0];
+      document.getElementById('report-headline').textContent = copy.headline;
+      document.getElementById('report-sub').textContent = copy.sub;
+      document.getElementById('point-finding').textContent = copy.finding;
+      document.getElementById('point-meaning').textContent = copy.meaning;
+      document.getElementById('point-next-step').textContent = copy.next;
+      const callout = document.getElementById('report-callout');
+      callout.className = 'callout ' + (copy.tone === 'ok' ? 'ok' : copy.tone === 'warn' ? 'warn' : 'strong');
+      callout.innerHTML = referableMessage(grade, refProb);
+      document.getElementById('expl-headline').textContent = isRef ? 'Why the model flagged this image' : 'Why the model cleared this image';
+
+      // Report: probabilities
+      document.getElementById('probGrid').style.display = '';
+      document.getElementById('prob-referable').textContent = (refProb * 100).toFixed(1) + '%';
+      const rbar = document.getElementById('prob-referable-bar');
+      rbar.style.background = refColor;
+      requestAnimationFrame(() => { rbar.style.width = (refProb * 100).toFixed(1) + '%'; });
+      document.getElementById('prob-confidence').textContent = confPct;
+      document.getElementById('prob-confidence-sub').textContent = `Probability assigned to ${gradeStr} (${gradeLabel})`;
+      renderClassBars(data.class_probabilities, grade);
+
+      // Clinical panel
+      document.getElementById('metric-grade').textContent = `${grade} / 4`;
+      document.getElementById('metric-grade-label').textContent = gradeLabel;
+      const mr = document.getElementById('metric-refer');
+      mr.textContent = isRef ? 'Yes' : 'No'; mr.style.color = refColor;
+      document.getElementById('metric-refer-prob').textContent = (refProb * 100).toFixed(1) + '%';
+      document.getElementById('metric-conf').textContent = confPct;
+      document.getElementById('metric-qual').textContent = quality.score != null ? `${quality.score} / 100 (${quality.category})` : '—';
+      document.getElementById('metric-qual-issues').textContent = (quality.issues && quality.issues.length) ? quality.issues.join('; ') : 'None flagged';
+      if (data.model && data.model.backbone) document.getElementById('metric-algo').textContent = data.model.backbone;
+      if (data.model && data.model.referable_definition) document.getElementById('metric-refdef').textContent = data.model.referable_definition;
+
+      // Overlays
+      const processedSrc = normalizeImageSource(data.processed_image_base64);
+      const gradcamSrc = normalizeImageSource(data.gradcam_overlay_base64);
+      const evidenceSrc = normalizeImageSource(data.ggsa_overlay_base64);
+      window.currentOverlays = { processed: processedSrc, gradcam: gradcamSrc, evidence: evidenceSrc };
+      const visuals = [
+        ['dash-image', gradcamSrc], ['maskView', gradcamSrc], ['thumb-gradcam', gradcamSrc], ['thumb-processed', processedSrc],
+        ['thumb-evidence', evidenceSrc], ['expl-gradcam', gradcamSrc], ['expl-processed', processedSrc], ['expl-evidence', evidenceSrc],
+        ['rep-processed', processedSrc], ['rep-gradcam', gradcamSrc]
+      ];
+      visuals.forEach(([id, src]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (src) { el.style.backgroundImage = `url(${src})`; el.classList.add('has-real-image'); }
+        else { el.style.backgroundImage = ''; el.classList.remove('has-real-image'); }
+      });
+      document.getElementById('mask-evidence').style.display = evidenceSrc ? '' : 'none';
+      document.getElementById('expl-evidence-tile').style.display = evidenceSrc ? '' : 'none';
+      document.getElementById('branch-overlay-pill').textContent = evidenceSrc ? '3 overlays' : '2 overlays';
+      // reset the viewer to Grad-CAM for the new result
+      const firstMask = document.querySelector('.mask-list .mask');
+      if (firstMask && gradcamSrc) selectMask(firstMask, 'gradcam', 'Grad-CAM Overlay');
+
+      // Persist
+      if (record) {
+        window.sessionData.history.unshift({ grade, grade_label: data.grade_label || '', referable: isRef, confidence: data.confidence, ts });
+        window.sessionData.latest = data;
+        saveSessionData();
+        renderHistoryTables();
+        recordScreeningStat(data);
+      }
+    }
+
+    // =========================================================
+    // API
+    // =========================================================
+    window.latestScreeningResult = null;
+    const SCREEN_TIMEOUT_MS = 180000;
+
+    async function runRealModel(file) {
+      if (!file) throw new Error('Please select an image first.');
+      if (!file.type || !file.type.startsWith('image/')) throw new Error('Please upload a valid image file.');
+      const formData = new FormData();
+      formData.append('image', file, file.name);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), SCREEN_TIMEOUT_MS);
+      let response;
+      try {
+        response = await fetch('/api/screen', { method: 'POST', body: formData, signal: controller.signal });
+      } catch (err) {
+        if (err.name === 'AbortError') throw new Error('The screening server took too long to respond. Please try again.');
+        throw new Error('Could not reach the screening server. Check your connection and try again.');
+      } finally { clearTimeout(timeoutId); }
+
+      let payload = null;
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) { try { payload = await response.json(); } catch (_e) { payload = null; } }
+      if (!response.ok) {
+        const serverMessage = payload && payload.error ? payload.error : null;
+        if (response.status === 400) throw new Error(serverMessage || 'That image could not be processed. Please try a different photo.');
+        if (response.status === 413) throw new Error(serverMessage || 'That image is too large. Please upload a smaller file.');
+        if (response.status === 504) throw new Error('The screening server timed out. Please try again.');
+        if (response.status === 502 || response.status === 503) throw new Error('The screening server is temporarily unavailable. Please try again shortly.');
+        throw new Error(serverMessage || 'Unable to complete screening. Please try again.');
+      }
+      if (!payload) throw new Error('Unable to complete screening. Please try again.');
+      return payload;
+    }
+
+    async function checkBackendHealth() {
+      const dot = document.getElementById('statusDot');
+      const label = document.getElementById('systemStatusText');
+      const syncLabel = document.getElementById('topbarSyncStatus');
+      const checkedAt = new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+      let online = false;
+      try {
+        const response = await fetch('/api/health');
+        const data = await response.json().catch(() => null);
+        online = response.ok && data && data.status !== 'error';
+      } catch (_err) { online = false; }
+      label.textContent = online ? 'AI engine online' : 'AI engine offline';
+      dot.style.background = online ? 'var(--ok)' : 'var(--coral)';
+      syncLabel.textContent = online ? `↻ Backend online · checked ${checkedAt}` : `↻ Backend unreachable · checked ${checkedAt}`;
+    }
+    setInterval(checkBackendHealth, 60000);
+
+    // =========================================================
+    // UPLOAD FLOW
+    // =========================================================
+    const UPLOAD_DEFAULT_TITLE = 'Add a retina image';
+    const UPLOAD_DEFAULT_TEXT = 'Use a clear, centered retina image from your camera or upload an existing image.';
+    const CHOOSE_LABEL = 'Choose image →';
+
+    function openFilePicker() {
+      const input = document.getElementById('fileInput');
+      input.value = '';
+      input.click();
+    }
+
+    // Reset only the in-progress upload state. History, stats and the latest
+    // report stay exactly as they are (point 11).
+    function resetUploadFlow() {
+      const input = document.getElementById('fileInput');
+      const button = document.getElementById('chooseBtn');
+      input.value = '';
+      document.getElementById('uploadTitle').textContent = UPLOAD_DEFAULT_TITLE;
+      document.getElementById('uploadText').textContent = UPLOAD_DEFAULT_TEXT;
+      button.disabled = false;
+      button.textContent = CHOOSE_LABEL;
+      button.onclick = openFilePicker;
+    }
+    function startNewScreening() {
+      resetUploadFlow();
+      toggleExplain(false);
+      go('screening');
+      toast('Ready for a new image. Previous results are kept in your history.');
+    }
+
+    document.getElementById('fileInput').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const button = document.getElementById('chooseBtn');
+      if (!file.type || !file.type.startsWith('image/')) { toast('Please upload a valid image file.'); return; }
+
+      document.getElementById('uploadTitle').textContent = 'Image ready for screening';
+      document.getElementById('uploadText').textContent = file.name + ' · ' + (file.size / 1024 / 1024).toFixed(1) + ' MB';
+      button.disabled = true; button.onclick = null; button.textContent = 'Analyzing retinal image...';
+
+      try {
+        const result = await runRealModel(file);
+        updateUIWithResult(result, { record: true });
+        button.textContent = 'Screening complete ✓';
+        toast('Quality: ' + (result.quality ? result.quality.category : 'unknown') + ' · ' + (result.referable ? 'Referable DR' : 'Non-referable') + ' · Grade ' + result.grade);
+        // Auto-redirect to the report (point 4)
+        setTimeout(() => { go('report'); resetUploadFlow(); }, 350);
+      } catch (err) {
+        console.error(err);
+        toast(err.message || 'Unable to complete screening. Please try again.');
+        resetUploadFlow();
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    // =========================================================
+    // 3D TILT ON CARDS
+    // =========================================================
+    (function initTilt() {
+      const fine = window.matchMedia('(pointer: fine)').matches;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!fine || reduced) return;
+      const MAX = 6; // degrees
+      document.querySelectorAll('.card:not(.tilt)').forEach(c => { if (!c.classList.contains('workflow')) c.classList.add('tilt'); });
+      // hero parallax
+      const hero = document.querySelector('.hero');
+      const heroText = hero ? hero.querySelectorAll('h2, p, .eyebrow') : [], heroLayers = hero ? hero.querySelectorAll('.layer-a, .layer-b, .orb3d') : [];
+      let heroPending = false, hx = 0, hy = 0;
+      if (hero) hero.addEventListener('mousemove', e => {
+        hx = e.clientX; hy = e.clientY;
+        if (heroPending) return; heroPending = true;
+        requestAnimationFrame(() => {
+          heroPending = false;
+          const r = hero.getBoundingClientRect(), px = (hx - r.left) / r.width - .5, py = (hy - r.top) / r.height - .5;
+          heroText.forEach(el => el.style.transform = `translate3d(${(px * -10).toFixed(1)}px, ${(py * -6).toFixed(1)}px, 30px)`);
+          heroLayers.forEach(el => el.style.translate = `${(px * 22).toFixed(1)}px ${(py * 14).toFixed(1)}px`);
+        });
+      }, { passive: true });
+      if (hero) hero.addEventListener('mouseleave', () => hero.querySelectorAll('h2, p, .eyebrow, .layer-a, .layer-b, .orb3d').forEach(el => { el.style.transform = ''; el.style.translate = ''; }));
+      let current = null, rect = null, pending = false, lx = 0, ly = 0;
+      function release() { if (current) { current.classList.remove('tilting'); current.style.transform = ''; current = null; rect = null; } }
+      document.addEventListener('mousemove', e => {
+        const card = e.target.closest('.card.tilt');
+        if (card !== current) { release(); if (card) { current = card; rect = card.getBoundingClientRect(); card.classList.add('tilting'); } }
+        if (!current) return;
+        lx = e.clientX; ly = e.clientY;
+        if (pending) return;
+        pending = true;
+        requestAnimationFrame(() => {
+          pending = false;
+          if (!current || !rect) return;
+          const px = (lx - rect.left) / rect.width - .5, py = (ly - rect.top) / rect.height - .5;
+          current.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-3px)`;
+        });
+      }, { passive: true });
+      document.addEventListener('mouseleave', release);
+      window.addEventListener('scroll', () => { if (current) rect = current.getBoundingClientRect(); }, { passive: true });
+    })();
+
+    // =========================================================
+    // CLICK FEEDBACK: ripple on controls, burst at the pointer
+    // =========================================================
+    (function initClickFX() {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.addEventListener('pointerdown', e => {
+        if (reduced) return;
+        const host = e.target.closest('.btn, .circle-btn, .nav button, .mask, .branch, .swatch');
+        if (host) {
+          const r = host.getBoundingClientRect(), size = Math.max(r.width, r.height) * 1.2;
+          const rp = document.createElement('span');
+          rp.className = 'ripple';
+          rp.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - r.left - size / 2}px;top:${e.clientY - r.top - size / 2}px`;
+          host.appendChild(rp); setTimeout(() => rp.remove(), 650);
+        }
+        if (!e.target.closest('input, textarea, select')) {
+          for (let i = 0; i < 8; i++) {
+            const b = document.createElement('i');
+            const a = (Math.PI * 2 / 8) * i + Math.random() * .6, d = 22 + Math.random() * 18;
+            b.className = 'burst';
+            b.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;--dx:${(Math.cos(a) * d).toFixed(1)}px;--dy:${(Math.sin(a) * d).toFixed(1)}px;background:${i % 2 ? 'var(--accent)' : 'var(--primary)'}`;
+            document.body.appendChild(b); setTimeout(() => b.remove(), 600);
+          }
+        }
+      }, { passive: true });
+    })();
+
+    // =========================================================
+    // CUSTOM CURSOR (iris)
+    // =========================================================
+    (function initCursor() {
+      const fine = window.matchMedia('(pointer: fine)').matches;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!fine || reduced) return;
+
+      const body = document.body;
+      body.classList.add('has-custom-cursor');
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      const trail = document.querySelector('.cursor-trail');
+      let tx = innerWidth / 2, ty = innerHeight / 2;
+      const INTERACTIVE = 'button, a, input, select, label[for], [data-interactive], [onclick], .card.tilt, .node, .branch, .mask, tr[onclick], .facility, .circle-btn, .text, .zoomable, .swatch, .lightbox-close, .lightbox-nav button';
+
+      let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
+      let hoverEl = null;
+
+      function setHover(t) {
+        if (t !== hoverEl) { hoverEl = t; body.classList.toggle('cursor-hover', !!t); body.classList.toggle('cursor-zoom', !!(t && t.classList && t.classList.contains('zoomable') && t.classList.contains('has-real-image'))); }
+      }
+      function resolveHover() { const el = document.elementFromPoint(mx, my); setHover(el ? el.closest(INTERACTIVE) : null); }
+      window.__cursorRecheck = () => requestAnimationFrame(resolveHover);
+      // Cheap path: update hover state from mouseover events (fires only when the target changes)
+      document.addEventListener('mouseover', e => setHover(e.target.closest ? e.target.closest(INTERACTIVE) : null), { passive: true });
+
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; body.classList.remove('cursor-out'); }, { passive: true });
+      document.addEventListener('mousedown', () => body.classList.add('cursor-press'));
+      document.addEventListener('mouseup', () => body.classList.remove('cursor-press'));
+      document.addEventListener('mouseout', e => { if (!e.relatedTarget) body.classList.add('cursor-out'); });
+      document.addEventListener('mouseover', e => { if (!e.relatedTarget) body.classList.remove('cursor-out'); });
+      window.addEventListener('blur', () => body.classList.remove('cursor-press'));
+      let scrollT = 0;
+      document.addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(resolveHover, 120); }, { passive: true, capture: true });
+
+      (function raf() {
+        dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+        rx += (mx - rx) * .22; ry += (my - ry) * .22;
+        ring.style.transform = `translate3d(${rx.toFixed(2)}px, ${ry.toFixed(2)}px, 0)`;
+        tx += (mx - tx) * .08; ty += (my - ty) * .08;
+        trail.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0)`;
+        requestAnimationFrame(raf);
+      })();
+    })();
+
+    // =========================================================
+    // BOOT: rehydrate from the session, then health-check
+    // =========================================================
+    (function boot() {
+      document.getElementById('pageTitle').textContent = GREETING.title;
+      renderHistoryTables();
+      renderSessionStats();
+      if (window.sessionData.latest) {
+        try { updateUIWithResult(window.sessionData.latest, { record: false }); }
+        catch (err) { console.warn('Could not rehydrate last screening', err); }
+      }
+      checkBackendHealth();
+    })();
+  </script>
+</body>
+</html>

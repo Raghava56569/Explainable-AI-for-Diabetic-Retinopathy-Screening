@@ -1,0 +1,16 @@
+# RetinaCare backend — pinned for a reproducible AWS EC2 deploy.
+#
+# torch/timm are CPU-only builds (no GPU needed/assumed on the EC2 box).
+# The --extra-index-url line below is what makes pip pull the small CPU-only
+# wheel for torch instead of the much larger default CUDA build from PyPI.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.3.1+cpu
+timm==0.9.16
+
+flask==3.0.3
+flask-cors==4.0.1
+gunicorn==22.0.0
+
+numpy==1.26.4
+opencv-python-headless==4.10.0.84
